@@ -64,8 +64,8 @@ used anywhere in the library (and in your app, if you use the preset) switches.
 | `--primary-active`    | Pressed shade                                       |
 | `--primary-light`     | Transparent tint (e.g. selected row background)     |
 | `--primary-glow`      | Glow shadow color (`shadow-glow`)                   |
-| `--gold`              | Accent color (focus rings, highlighted links)       |
-| `--gold-*`            | Variants (`-hover`, `-active`, `-light`, `-glow`)   |
+| `--secondary`              | Accent color (focus rings, highlighted links)       |
+| `--secondary-*`            | Variants (`-hover`, `-active`, `-light`, `-glow`)   |
 | `--bg-primary`        | Page background                                     |
 | `--bg-secondary`      | Panel background                                    |
 | `--bg-tertiary`       | Nested panel background                             |

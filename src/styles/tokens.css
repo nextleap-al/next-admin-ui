@@ -7,7 +7,7 @@
 
      :root {
        --primary: #7c3aed;
-       --gold: #f97316;
+       --secondary: #f97316;
        --bg-primary: #fafafa;
      }
 
@@ -29,11 +29,11 @@
   --primary-glow: rgba(68, 210, 105, 0.3);
 
   /* Accent color (gold by default) — used for focus rings, highlights */
-  --gold: #c5982d;
-  --gold-hover: #bc8821;
-  --gold-active: #b57918;
-  --gold-light: rgba(197, 152, 45, 0.1);
-  --gold-glow: rgba(197, 152, 45, 0.3);
+  --secondary: #c5982d;
+  --secondary-hover: #bc8821;
+  --secondary-active: #b57918;
+  --secondary-light: rgba(197, 152, 45, 0.1);
+  --secondary-glow: rgba(197, 152, 45, 0.3);
 
   /* Neutral ramp (light theme default) */
   --surface-50: #ffffff;

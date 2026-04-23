@@ -76,7 +76,7 @@ const preset: Partial<Config> = {
         glass: '0 0 20px 0 rgba(0, 0, 0, 0.05)',
         'glass-lg': '0 8px 32px 0 rgba(0, 0, 0, 0.08)',
         glow: '0 0 24px -4px var(--primary-glow, rgba(68, 210, 105, 0.3))',
-        'gold-glow': '0 0 24px -4px var(--gold-glow, rgba(197, 152, 45, 0.3))',
+        'gold-glow': '0 0 24px -4px var(--secondary-glow, rgba(197, 152, 45, 0.3))',
         'inner-glow': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.05)',
       },
       borderRadius: {

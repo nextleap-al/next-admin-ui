@@ -15,7 +15,7 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
       warning: 'bg-[var(--warning-light)] text-[var(--warning)]',
       error: 'bg-[var(--error-light)] text-[var(--error)]',
       info: 'bg-[var(--info-light)] text-[var(--info)]',
-      primary: 'bg-[var(--gold-light)] text-gold-400',
+      primary: 'bg-[var(--secondary-light)] text-gold-400',
       outline: 'border border-[var(--border-default)] text-[var(--text-secondary)] bg-transparent',
     };
 

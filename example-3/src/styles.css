@@ -42,11 +42,11 @@
   --nl-gold-900: #581c87;
   --nl-gold-950: #3b0764;
 
-  --gold:        #a855f7;
-  --gold-hover:  #9333ea;
-  --gold-active: #7e22ce;
-  --gold-light:  rgba(168, 85, 247, 0.1);
-  --gold-glow:   rgba(168, 85, 247, 0.3);
+  --secondary:        #a855f7;
+  --secondary-hover:  #9333ea;
+  --secondary-active: #7e22ce;
+  --secondary-light:  rgba(168, 85, 247, 0.1);
+  --secondary-glow:   rgba(168, 85, 247, 0.3);
 
   /* Focus ring follows the accent */
   --border-focus: #a855f7;

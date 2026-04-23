@@ -31,7 +31,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       secondary:
         'bg-[var(--surface-200)] text-[var(--text-primary)] hover:bg-[var(--surface-300)] disabled:opacity-50',
       outline:
-        'border border-[var(--border-default)] text-[var(--text-primary)] hover:border-gold-400 hover:text-gold-400 hover:bg-[var(--gold-light)] disabled:opacity-50',
+        'border border-[var(--border-default)] text-[var(--text-primary)] hover:border-gold-400 hover:text-gold-400 hover:bg-[var(--secondary-light)] disabled:opacity-50',
       ghost:
         'text-[var(--text-secondary)] hover:bg-[var(--surface-200)] hover:text-[var(--text-primary)] disabled:opacity-50',
       danger:
