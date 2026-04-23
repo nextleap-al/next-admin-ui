@@ -1,0 +1,55 @@
+/* Chillax */
+@font-face {
+  font-family: 'Chillax';
+  src: url('./fonts/chillax-200.woff2') format('woff2'),
+       url('./fonts/chillax-200.woff') format('woff'),
+       url('./fonts/chillax-200.ttf') format('truetype');
+  font-weight: 200;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Chillax';
+  src: url('./fonts/chillax-300.woff2') format('woff2'),
+       url('./fonts/chillax-300.woff') format('woff'),
+       url('./fonts/chillax-300.ttf') format('truetype');
+  font-weight: 300;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Chillax';
+  src: url('./fonts/chillax-400.woff2') format('woff2'),
+       url('./fonts/chillax-400.woff') format('woff'),
+       url('./fonts/chillax-400.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Chillax';
+  src: url('./fonts/chillax-500.woff2') format('woff2'),
+       url('./fonts/chillax-500.woff') format('woff'),
+       url('./fonts/chillax-500.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Chillax';
+  src: url('./fonts/chillax-600.woff2') format('woff2'),
+       url('./fonts/chillax-600.woff') format('woff'),
+       url('./fonts/chillax-600.ttf') format('truetype');
+  font-weight: 600;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Chillax';
+  src: url('./fonts/chillax-700.woff2') format('woff2'),
+       url('./fonts/chillax-700.woff') format('woff'),
+       url('./fonts/chillax-700.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
+}

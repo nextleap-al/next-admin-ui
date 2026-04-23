@@ -1,0 +1,12 @@
+/* ============================================
+   @nextleap/next-ui — Main stylesheet
+
+   Single import that provides tokens, base reset, and utility classes.
+   If you only want tokens (no base reset), import `@nextleap/next-ui/tokens.css`
+   directly and skip this file.
+   ============================================ */
+
+@import './fonts.css';
+@import './tokens.css';
+@import './base.css';
+@import './utilities.css';

@@ -1,0 +1,72 @@
+/* ============================================
+   @nextleap/next-ui — Base styles
+
+   Optional global reset and typography layer. Import this only if
+   you want the library's default document-level styling (body font,
+   scrollbars, focus styles). Component styles work without it.
+
+   All declarations resolve through design tokens in `tokens.css`.
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--nl-font-sans, 'Chillax'), system-ui, sans-serif;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--nl-font-display, 'Chillax'), system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+.text-display {
+  font-family: var(--nl-font-display, 'Chillax'), system-ui, sans-serif;
+}
+
+.text-mono {
+  font-family: var(--nl-font-mono, 'JetBrains Mono'), monospace;
+}
+
+/* Scrollbars */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-400);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--surface-500);
+}
+
+/* Focus */
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}

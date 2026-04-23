@@ -1,0 +1,84 @@
+{
+  "name": "@nextleap/next-ui",
+  "version": "1.0.2",
+  "description": "Shared design-system primitives, hooks, and layout building blocks used across NextLeap ecosystem apps. Tailwind-based, theme-overridable, designed for AI-driven UI composition.",
+  "type": "module",
+  "author": "nextleap",
+  "license": "ISC",
+  "keywords": [
+    "react",
+    "ui",
+    "components",
+    "tailwindcss",
+    "design-system",
+    "nextleap"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./src/styles/index.css",
+    "./tokens.css": "./src/styles/tokens.css",
+    "./tailwind-preset": {
+      "types": "./dist/tailwind-preset.d.ts",
+      "import": "./dist/tailwind-preset.js",
+      "require": "./dist/tailwind-preset.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "src/styles",
+    "README.md",
+    "docs"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0",
+    "react-router-dom": ">=6.0.0",
+    "tailwindcss": ">=3.4.0"
+  },
+  "peerDependenciesMeta": {
+    "react-router-dom": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@headlessui/react": "^2.2.0",
+    "@radix-ui/react-popover": "^1.1.15",
+    "@remixicon/react": "^4.8.0",
+    "@tanstack/react-table": "^8.20.0",
+    "clsx": "^2.1.0",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^0.454.0",
+    "react-day-picker": "^8.10.1",
+    "react-hot-toast": "^2.4.1",
+    "tailwind-merge": "^2.5.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0",
+    "tailwindcss": "^3.4.14",
+    "tsup": "^8.3.0",
+    "typescript": "~5.6.2"
+  }
+}
