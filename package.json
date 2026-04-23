@@ -1,6 +1,6 @@
 {
   "name": "@nextleap-al/admin-ui",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Shared design-system primitives, hooks, and layout building blocks used across NextLeap ecosystem apps. Tailwind-based, theme-overridable, designed for AI-driven UI composition.",
   "type": "module",
   "author": "nextleap",
