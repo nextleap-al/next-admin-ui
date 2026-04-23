@@ -1,5 +1,5 @@
 {
-  "name": "@nextleap/admin-ui-example-3",
+  "name": "@nextleap-al/admin-ui-example-3",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@nextleap/admin-ui": "file:..",
+    "@nextleap-al/admin-ui": "file:..",
     "@tanstack/react-table": "^8.20.0",
     "lucide-react": "^0.454.0",
     "react": "^18.3.1",

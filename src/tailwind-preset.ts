@@ -1,20 +1,20 @@
 /**
- * Tailwind preset for @nextleap/admin-ui.
+ * Tailwind preset for @nextleap-al/admin-ui.
  *
  * Consumers should add this preset to their `tailwind.config.js`:
  *
- *   import nextuiPreset from '@nextleap/admin-ui/tailwind-preset';
+ *   import nextuiPreset from '@nextleap-al/admin-ui/tailwind-preset';
  *   export default {
  *     presets: [nextuiPreset],
  *     content: [
  *       './src/**\/*.{ts,tsx}',
- *       './node_modules/@nextleap/admin-ui/dist/**\/*.{js,mjs}',
+ *       './node_modules/@nextleap-al/admin-ui/dist/**\/*.{js,mjs}',
  *     ],
  *   };
  *
  * The preset exposes the default NextLeap color scales (`primary`, `gold`)
  * AND maps `surface-*`, status colors, shadows, spacing, etc. to CSS
- * variables declared in `@nextleap/admin-ui/tokens.css`. Override the CSS
+ * variables declared in `@nextleap-al/admin-ui/tokens.css`. Override the CSS
  * variables at `:root` in your app to theme the library without rebuilding.
  */
 

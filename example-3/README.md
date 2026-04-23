@@ -1,6 +1,6 @@
 # NextUI Example 3
 
-A guided tour of every component in [`@nextleap/admin-ui`](../), built from the
+A guided tour of every component in [`@nextleap-al/admin-ui`](../), built from the
 library's own `docs/` folder.
 
 ## Run it

@@ -1,6 +1,6 @@
 # Theming
 
-Every visual property in `@nextleap/admin-ui` is backed by a CSS custom property.
+Every visual property in `@nextleap-al/admin-ui` is backed by a CSS custom property.
 You can re-theme the library at runtime — no rebuild, no tailwind config
 changes — by overriding the variables in your app's stylesheet.
 
@@ -9,7 +9,7 @@ changes — by overriding the variables in your app's stylesheet.
 Put overrides **after** you import the library styles:
 
 ```css
-@import '@nextleap/admin-ui/styles.css';
+@import '@nextleap-al/admin-ui/styles.css';
 
 :root {
   --nl-primary-500: #3b82f6;
@@ -152,7 +152,7 @@ If you use `.dark` instead, mirror the same rules.
 If you want to own the entire palette, import only the token shell:
 
 ```css
-@import '@nextleap/admin-ui/tokens.css';
+@import '@nextleap-al/admin-ui/tokens.css';
 /* then define your own values — the import gives you the names + dark support */
 ```
 

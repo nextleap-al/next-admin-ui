@@ -1,6 +1,6 @@
 # Building an App Shell
 
-`@nextleap/admin-ui` ships layout **building blocks**, not a full application shell.
+`@nextleap-al/admin-ui` ships layout **building blocks**, not a full application shell.
 Each app is expected to provide its own menu structure, permissions, and
 integrations — but the library gives you the generic scaffolding so every
 NextLeap app looks and behaves the same.
@@ -34,7 +34,7 @@ import {
   NotificationBell,
   Logo,
   Breadcrumbs,
-} from '@nextleap/admin-ui';
+} from '@nextleap-al/admin-ui';
 import { NavLink, Link, Outlet, useLocation } from 'react-router-dom';
 import { Home, Users, Settings } from 'lucide-react';
 

@@ -7,7 +7,7 @@ import {
   CardFooter,
   CardHeader,
   PageHeader,
-} from '@nextleap/admin-ui';
+} from '@nextleap-al/admin-ui';
 import {
   ArrowRight,
   Database,
@@ -76,10 +76,10 @@ export default function OverviewPage() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title="NextUI — Example 3"
-        description="A guided tour of @nextleap/admin-ui components, built entirely from the docs."
+        description="A guided tour of @nextleap-al/admin-ui components, built entirely from the docs."
         actions={
           <a
-            href="https://www.npmjs.com/package/@nextleap/admin-ui"
+            href="https://www.npmjs.com/package/@nextleap-al/admin-ui"
             target="_blank"
             rel="noreferrer"
           >

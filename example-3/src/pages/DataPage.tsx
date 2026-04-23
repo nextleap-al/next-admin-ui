@@ -16,7 +16,7 @@ import {
   TabTrigger,
   Tabs,
   type PaginationMeta,
-} from '@nextleap/admin-ui';
+} from '@nextleap-al/admin-ui';
 import type { ColumnDef, RowSelectionState, SortingState } from '@tanstack/react-table';
 import { Ban, Check, Mail, Pencil, Plus, Trash2, X } from 'lucide-react';
 

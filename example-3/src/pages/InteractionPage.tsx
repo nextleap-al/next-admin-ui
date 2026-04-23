@@ -9,7 +9,7 @@ import {
   FileUploadDropzone,
   PageHeader,
   SortableList,
-} from '@nextleap/admin-ui';
+} from '@nextleap-al/admin-ui';
 import { Section } from '../components/Section';
 
 interface Task {

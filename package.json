@@ -1,5 +1,5 @@
 {
-  "name": "@nextleap/admin-ui",
+  "name": "@nextleap-al/admin-ui",
   "version": "1.0.2",
   "description": "Shared design-system primitives, hooks, and layout building blocks used across NextLeap ecosystem apps. Tailwind-based, theme-overridable, designed for AI-driven UI composition.",
   "type": "module",
@@ -36,6 +36,10 @@
     "README.md",
     "docs"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "sideEffects": [
     "*.css"
   ],

@@ -20,8 +20,8 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "@nextleap/admin-ui": ["../src/index.ts"],
-      "@nextleap/admin-ui/tailwind-preset": ["../src/tailwind-preset.ts"],
+      "@nextleap-al/admin-ui": ["../src/index.ts"],
+      "@nextleap-al/admin-ui/tailwind-preset": ["../src/tailwind-preset.ts"],
       "@/*": ["../src/*"]
     }
   },

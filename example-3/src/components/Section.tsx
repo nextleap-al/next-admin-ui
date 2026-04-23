@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Card, CardContent, CardHeader } from '@nextleap/admin-ui';
+import { Card, CardContent, CardHeader } from '@nextleap-al/admin-ui';
 
 interface SectionProps {
   title: string;

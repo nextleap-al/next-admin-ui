@@ -15,7 +15,7 @@ import {
   StatusSwitch,
   Switch,
   Textarea,
-} from '@nextleap/admin-ui';
+} from '@nextleap-al/admin-ui';
 
 type DropdownOption = {
   value: string | number;

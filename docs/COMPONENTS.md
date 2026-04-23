@@ -1,4 +1,4 @@
-# Component Reference — `@nextleap/admin-ui`
+# Component Reference — `@nextleap-al/admin-ui`
 
 Complete prop reference for every exported component. Props marked with `?`
 are optional. All components accept a `className` that is merged with the
@@ -7,7 +7,7 @@ component's internal classes via `tailwind-merge`.
 All components are imported from the package root:
 
 ```ts
-import { Button, Card, Input, DataTable, /* etc. */ } from '@nextleap/admin-ui';
+import { Button, Card, Input, DataTable, /* etc. */ } from '@nextleap-al/admin-ui';
 ```
 
 ---
@@ -661,7 +661,7 @@ interface DataTableProps<TData> {
 
 Tip: you can trigger row-level inline edit from `rowActions` (e.g., an Edit menu item) by managing local row edit/create draft state in your page and rendering `Input` cells conditionally for that row.
 
-`PaginationMeta` is exported from `@nextleap/admin-ui`:
+`PaginationMeta` is exported from `@nextleap-al/admin-ui`:
 
 ```ts
 interface PaginationMeta {
@@ -803,7 +803,7 @@ interface SortableItemProps {
 #### Minimal example
 
 ```tsx
-import { SortableList } from '@nextleap/admin-ui';
+import { SortableList } from '@nextleap-al/admin-ui';
 
 type Question = { id: number; sortOrder: number; text: string };
 

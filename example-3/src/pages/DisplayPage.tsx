@@ -20,7 +20,7 @@ import {
   SkeletonText,
   StatusBadge,
   Tooltip,
-} from '@nextleap/admin-ui';
+} from '@nextleap-al/admin-ui';
 import { Bell, Copy, Info, Plus, RefreshCw } from 'lucide-react';
 import { DemoRow, Section } from '../components/Section';
 
