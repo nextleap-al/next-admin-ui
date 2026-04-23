@@ -17,7 +17,7 @@ const Tooltip = ({
   className,
 }: TooltipProps) => {
   const [isVisible, setIsVisible] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
 
   const showTooltip = () => {

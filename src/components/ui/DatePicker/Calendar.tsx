@@ -142,7 +142,11 @@ const Calendar = ({
         Day: (dayProps: DayProps) => {
           const buttonRef = React.useRef<HTMLButtonElement>(null);
           const { activeModifiers, buttonProps, divProps, isButton, isHidden } =
-            useDayRender(dayProps.date, dayProps.displayMonth, buttonRef);
+            useDayRender(
+              dayProps.date,
+              dayProps.displayMonth,
+              buttonRef as React.RefObject<HTMLButtonElement>,
+            );
 
           const { selected, today, disabled, range_middle } = activeModifiers;
 

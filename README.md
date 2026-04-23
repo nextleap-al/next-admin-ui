@@ -14,11 +14,51 @@ consumed by AI agents to compose new UIs quickly.
 
 ```bash
 npm i @nextleap/next-ui
-# peer deps (if you don't already have them)
+```
+
+### Peer dependencies (you must install these)
+
+The consumer app is expected to provide React, ReactDOM, and Tailwind itself.
+Any modern React + Tailwind project already has them:
+
+```bash
 npm i react react-dom tailwindcss
-# optional: only if you use <Breadcrumbs>/<Logo>/<SidebarNavItem> with a Link
+```
+
+Optional — only if you use `<Breadcrumbs>`, `<Logo>`, or `<SidebarNavItem>` with
+the default `Link` (you can otherwise pass your own via the `LinkComponent`
+prop, e.g. `next/link`):
+
+```bash
 npm i react-router-dom
 ```
+
+### Runtime dependencies (installed automatically)
+
+These are pulled in by `npm i @nextleap/next-ui` — **you do not need to install
+them manually**. Listed here so AI agents and debuggers know what's present in
+the dependency graph when consuming the lib:
+
+```
+@dnd-kit/core          # sortable lists (SortableList, SortableItem)
+@dnd-kit/sortable
+@dnd-kit/utilities
+@headlessui/react      # Modal, Dropdown, Switch
+@radix-ui/react-popover # DatePicker, DateRangePicker popovers
+@remixicon/react       # icon set used by some layout components
+@tanstack/react-table  # DataTable
+clsx                   # class merging (used by `cn`)
+date-fns               # date formatting for DatePicker family
+lucide-react           # primary icon set across components
+react-day-picker       # Calendar, DatePicker
+react-hot-toast        # Toaster singleton
+tailwind-merge         # class deduping (used by `cn`)
+```
+
+> **AI note:** if `npm ls` shows any of the above as missing after installing
+> `@nextleap/next-ui`, the install was incomplete — rerun `npm install` rather
+> than adding them manually, so the version ranges stay aligned with the
+> library's lockfile.
 
 ## Setup
 
