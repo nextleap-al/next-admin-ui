@@ -1,4 +1,4 @@
-# Hooks Reference — `@nextleap/next-ui`
+# Hooks Reference — `@nextleap/admin-ui`
 
 All hooks are importable from the package root:
 
@@ -9,7 +9,7 @@ import {
   useInlineEdit,
   useRowInlineEdit,
   useQueryParams,
-} from '@nextleap/next-ui';
+} from '@nextleap/admin-ui';
 ```
 
 ---

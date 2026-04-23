@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, PageHeader } from '@nextleap/next-ui';
+import { Button, PageHeader } from '@nextleap/admin-ui';
 import { Download, Heart, Plus, Save, Settings, Sparkles, Trash2 } from 'lucide-react';
 import { DemoRow, Section } from '../components/Section';
 

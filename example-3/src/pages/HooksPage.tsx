@@ -11,7 +11,7 @@ import {
   useDebouncedCallback,
   useInlineEdit,
   useQueryParams,
-} from '@nextleap/next-ui';
+} from '@nextleap/admin-ui';
 import { Check, Edit3, Loader2, Search, X } from 'lucide-react';
 import { Section } from '../components/Section';
 
@@ -200,7 +200,7 @@ export default function HooksPage() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title="Hooks"
-        description="Every hook exported by @nextleap/next-ui in action."
+        description="Every hook exported by @nextleap/admin-ui in action."
       />
 
       <Section

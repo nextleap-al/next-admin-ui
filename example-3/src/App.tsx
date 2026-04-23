@@ -11,7 +11,7 @@ import {
   SidebarShell,
   ThemeToggleButton,
   TopbarShell,
-} from '@nextleap/next-ui';
+} from '@nextleap/admin-ui';
 import {
   Boxes,
   Database,

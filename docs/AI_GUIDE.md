@@ -1,4 +1,4 @@
-# AI Guide — `@nextleap/next-ui`
+# AI Guide — `@nextleap/admin-ui`
 
 This document is written for AI agents that generate UI code. It is compact,
 exhaustive, and copy-paste-safe.
@@ -6,8 +6,8 @@ exhaustive, and copy-paste-safe.
 ## Ground rules
 
 1. **All components are imported from the package root**, e.g.
-   `import { Button, Card, Input } from '@nextleap/next-ui'`. Do not deep-import
-   from `@nextleap/next-ui/components/...`.
+   `import { Button, Card, Input } from '@nextleap/admin-ui'`. Do not deep-import
+   from `@nextleap/admin-ui/components/...`.
 2. **Never hardcode colors or spacing in custom Tailwind classes.** Use the
    component variants or the CSS variables listed in `THEMING.md`.
 3. **Styling extension**: every visual component accepts `className` which is

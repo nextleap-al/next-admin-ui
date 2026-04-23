@@ -1,4 +1,4 @@
-# @nextleap/next-ui
+# @nextleap/admin-ui
 
 Shared design-system primitives, hooks, and layout building blocks used across
 the NextLeap ecosystem. Tailwind-based, theme-overridable, and designed to be
@@ -13,7 +13,7 @@ consumed by AI agents to compose new UIs quickly.
 ## Install
 
 ```bash
-npm i @nextleap/next-ui
+npm i @nextleap/admin-ui
 ```
 
 ### Peer dependencies (you must install these)
@@ -35,7 +35,7 @@ npm i react-router-dom
 
 ### Runtime dependencies (installed automatically)
 
-These are pulled in by `npm i @nextleap/next-ui` — **you do not need to install
+These are pulled in by `npm i @nextleap/admin-ui` — **you do not need to install
 them manually**. Listed here so AI agents and debuggers know what's present in
 the dependency graph when consuming the lib:
 
@@ -56,7 +56,7 @@ tailwind-merge         # class deduping (used by `cn`)
 ```
 
 > **AI note:** if `npm ls` shows any of the above as missing after installing
-> `@nextleap/next-ui`, the install was incomplete — rerun `npm install` rather
+> `@nextleap/admin-ui`, the install was incomplete — rerun `npm install` rather
 > than adding them manually, so the version ranges stay aligned with the
 > library's lockfile.
 
@@ -68,7 +68,7 @@ In your `tailwind.config.{js,ts}`:
 
 ```ts
 import type { Config } from 'tailwindcss';
-import nextleapPreset from '@nextleap/next-ui/tailwind-preset';
+import nextleapPreset from '@nextleap/admin-ui/tailwind-preset';
 
 export default {
   presets: [nextleapPreset],
@@ -76,7 +76,7 @@ export default {
     './index.html',
     './src/**/*.{ts,tsx}',
     // IMPORTANT: include the library so its class names are detected
-    './node_modules/@nextleap/next-ui/dist/**/*.{js,cjs}',
+    './node_modules/@nextleap/admin-ui/dist/**/*.{js,cjs}',
   ],
 } satisfies Config;
 ```
@@ -91,19 +91,19 @@ or your root CSS file) **after** Tailwind's base/components/utilities:
 @tailwind components;
 @tailwind utilities;
 
-@import '@nextleap/next-ui/styles.css';
+@import '@nextleap/admin-ui/styles.css';
 ```
 
 If you only want the design tokens (not the base/utilities):
 
 ```css
-@import '@nextleap/next-ui/tokens.css';
+@import '@nextleap/admin-ui/tokens.css';
 ```
 
 ### 3. Use components
 
 ```tsx
-import { Button, Card, Input, AppShell, SidebarShell } from '@nextleap/next-ui';
+import { Button, Card, Input, AppShell, SidebarShell } from '@nextleap/admin-ui';
 
 export default function Page() {
   return (

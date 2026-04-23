@@ -9,10 +9,10 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@nextleap/next-ui/tailwind-preset': path.resolve(libSrc, 'tailwind-preset.ts'),
-      '@nextleap/next-ui/styles.css': path.resolve(libSrc, 'styles/index.css'),
-      '@nextleap/next-ui/tokens.css': path.resolve(libSrc, 'styles/tokens.css'),
-      '@nextleap/next-ui': path.resolve(libSrc, 'index.ts'),
+      '@nextleap/admin-ui/tailwind-preset': path.resolve(libSrc, 'tailwind-preset.ts'),
+      '@nextleap/admin-ui/styles.css': path.resolve(libSrc, 'styles/index.css'),
+      '@nextleap/admin-ui/tokens.css': path.resolve(libSrc, 'styles/tokens.css'),
+      '@nextleap/admin-ui': path.resolve(libSrc, 'index.ts'),
       '@': libSrc,
     },
     dedupe: ['react', 'react-dom', 'react-router-dom'],
@@ -25,6 +25,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    exclude: ['@nextleap/next-ui'],
+    exclude: ['@nextleap/admin-ui'],
   },
 });

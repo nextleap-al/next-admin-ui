@@ -8,7 +8,7 @@ import {
   Modal,
   PageHeader,
   Textarea,
-} from '@nextleap/next-ui';
+} from '@nextleap/admin-ui';
 import { Copy, Edit3, Mail, MoreVertical, Share2, Trash2 } from 'lucide-react';
 import { DemoRow, Section } from '../components/Section';
 
