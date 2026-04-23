@@ -1,0 +1,85 @@
+@import '@nextleap/next-ui/styles.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   example-3 theme override — blue primary, purple accent.
+   Demonstrates how to re-theme the library at runtime by
+   redefining the CSS variables exposed in tokens.css.
+   ============================================ */
+:root {
+  /* Primary scale → blue */
+  --nl-primary-50:  #eff6ff;
+  --nl-primary-100: #dbeafe;
+  --nl-primary-200: #bfdbfe;
+  --nl-primary-300: #93c5fd;
+  --nl-primary-400: #60a5fa;
+  --nl-primary-500: #3b82f6;
+  --nl-primary-600: #2563eb;
+  --nl-primary-700: #1d4ed8;
+  --nl-primary-800: #1e40af;
+  --nl-primary-900: #1e3a8a;
+  --nl-primary-950: #172554;
+
+  --primary:        #3b82f6;
+  --primary-hover:  #2563eb;
+  --primary-active: #1d4ed8;
+  --primary-light:  rgba(59, 130, 246, 0.1);
+  --primary-glow:   rgba(59, 130, 246, 0.3);
+
+  /* Accent scale (formerly gold) → purple */
+  --nl-gold-50:  #faf5ff;
+  --nl-gold-100: #f3e8ff;
+  --nl-gold-200: #e9d5ff;
+  --nl-gold-300: #d8b4fe;
+  --nl-gold-400: #c084fc;
+  --nl-gold-500: #a855f7;
+  --nl-gold-600: #9333ea;
+  --nl-gold-700: #7e22ce;
+  --nl-gold-800: #6b21a8;
+  --nl-gold-900: #581c87;
+  --nl-gold-950: #3b0764;
+
+  --gold:        #a855f7;
+  --gold-hover:  #9333ea;
+  --gold-active: #7e22ce;
+  --gold-light:  rgba(168, 85, 247, 0.1);
+  --gold-glow:   rgba(168, 85, 247, 0.3);
+
+  /* Focus ring follows the accent */
+  --border-focus: #a855f7;
+}
+
+html,
+body,
+#root {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+body {
+  font-family: 'Chillax', system-ui, sans-serif;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.section-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .section-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .section-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
