@@ -5,6 +5,14 @@
   "type": "module",
   "author": "nextleap",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nextleap-al/next-admin-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nextleap-al/next-admin-ui/issues"
+  },
+  "homepage": "https://github.com/nextleap-al/next-admin-ui#readme",
   "keywords": [
     "react",
     "ui",
