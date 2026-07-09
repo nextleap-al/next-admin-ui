@@ -1,5 +1,5 @@
-@import '@nextleap-al/admin-ui/styles.css';
 @import 'tailwindcss';
+@import '@nextleap-al/admin-ui/styles.css';
 
 /* Load the NextLeap preset (colors, shadows, animations) from the
    legacy JS config. Tailwind 4 resolves this relative to this file. */

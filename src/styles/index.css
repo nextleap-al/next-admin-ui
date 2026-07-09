@@ -8,5 +8,5 @@
 
 @import './fonts.css';
 @import './tokens.css';
-@import './base.css';
-@import './utilities.css';
+@import './base.css' layer(base);
+@import './utilities.css' layer(components);
