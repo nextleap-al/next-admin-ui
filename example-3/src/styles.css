@@ -1,8 +1,9 @@
 @import '@nextleap-al/admin-ui/styles.css';
+@import 'tailwindcss';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Load the NextLeap preset (colors, shadows, animations) from the
+   legacy JS config. Tailwind 4 resolves this relative to this file. */
+@config '../tailwind.config.ts';
 
 /* ============================================
    example-3 theme override — blue primary, purple accent.

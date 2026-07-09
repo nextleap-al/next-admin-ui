@@ -1,12 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 import path from 'node:path';
 
 const libRoot = path.resolve(__dirname, '..');
 const libSrc = path.resolve(libRoot, 'src');
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
       '@nextleap-al/admin-ui/tailwind-preset': path.resolve(libSrc, 'tailwind-preset.ts'),
