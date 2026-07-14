@@ -4,8 +4,10 @@ import {
   Checkbox,
   DatePicker,
   DateRangePicker,
+  DateRangePickerWithTimeInput,
   DEFAULT_DATE_PRESETS,
   DEFAULT_DATE_RANGE_PRESETS,
+  InlineSelect,
   Input,
   MultiSelectDropdown,
   MultiSelectSimple,
@@ -57,6 +59,12 @@ const PRIORITY_OPTIONS: DropdownOption[] = [
   { value: 'high', label: 'High' },
 ];
 
+const SORT_OPTIONS: DropdownOption[] = [
+  { value: 'recent', label: 'Most recent' },
+  { value: 'name', label: 'Name (A–Z)' },
+  { value: 'oldest', label: 'Oldest first' },
+];
+
 export default function FormPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -69,11 +77,15 @@ export default function FormPage() {
   const [userId, setUserId] = useState<string | number | null>(null);
   const [tags, setTags] = useState<Array<string | number>>(['frontend']);
   const [priorities, setPriorities] = useState<Array<string | number>>([]);
+  const [sortBy, setSortBy] = useState<string | number>('recent');
 
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [range, setRange] = useState<{ from: Date | undefined; to?: Date | undefined } | undefined>(
     undefined,
   );
+  const [rangeWithTime, setRangeWithTime] = useState<
+    { from: Date | undefined; to?: Date | undefined } | undefined
+  >(undefined);
 
   return (
     <div className="flex flex-col gap-6">
@@ -186,6 +198,11 @@ export default function FormPage() {
             placeholder="Pick one or more"
           />
         </div>
+        <div className="mt-4">
+          <DemoRow label="InlineSelect (label beside the control — for toolbars & filters)">
+            <InlineSelect label="Sort by" value={sortBy} onChange={setSortBy} options={SORT_OPTIONS} />
+          </DemoRow>
+        </div>
       </Section>
 
       <Section title="Dates" description="DatePicker and DateRangePicker with built-in presets.">
@@ -213,6 +230,20 @@ export default function FormPage() {
             {range?.from && range.to && (
               <span className="text-sm text-[var(--text-secondary)]">
                 {range.from.toLocaleDateString()} → {range.to.toLocaleDateString()}
+              </span>
+            )}
+          </DemoRow>
+        </div>
+        <div className="mt-4">
+          <DemoRow label="Date range + time (DateRangePickerWithTimeInput)">
+            <DateRangePickerWithTimeInput
+              value={rangeWithTime}
+              onChange={setRangeWithTime}
+              placeholder="Pick a range with times"
+            />
+            {rangeWithTime?.from && rangeWithTime.to && (
+              <span className="text-sm text-[var(--text-secondary)]">
+                {rangeWithTime.from.toLocaleString()} → {rangeWithTime.to.toLocaleString()}
               </span>
             )}
           </DemoRow>

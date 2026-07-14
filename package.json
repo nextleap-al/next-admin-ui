@@ -55,10 +55,14 @@
   "peerDependencies": {
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
+    "react-hook-form": ">=7.0.0",
     "react-router-dom": ">=6.0.0",
     "tailwindcss": ">=4.0.0"
   },
   "peerDependenciesMeta": {
+    "react-hook-form": {
+      "optional": true
+    },
     "react-router-dom": {
       "optional": true
     }
@@ -83,6 +87,7 @@
     "@types/react-dom": "^19.2.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.54.0",
     "react-router-dom": "^6.28.0",
     "tailwindcss": "^4.1.0",
     "tsup": "^8.3.0",

@@ -8,9 +8,48 @@ import {
   FileSelectDropzone,
   FileUploadDropzone,
   PageHeader,
+  SortableItem,
   SortableList,
 } from '@nextleap-al/admin-ui';
+import { DndContext, closestCenter, type DragEndEvent } from '@dnd-kit/core';
+import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Section } from '../components/Section';
+
+/** Standalone `SortableItem` — used directly only when you compose your own DndContext (grids, etc.). */
+function StandaloneSortableDemo() {
+  const [steps, setSteps] = useState([
+    { id: 1, text: 'Design' },
+    { id: 2, text: 'Build' },
+    { id: 3, text: 'Review' },
+    { id: 4, text: 'Ship' },
+  ]);
+
+  const onDragEnd = ({ active, over }: DragEndEvent) => {
+    if (over && active.id !== over.id) {
+      setSteps((items) => {
+        const from = items.findIndex((i) => i.id === active.id);
+        const to = items.findIndex((i) => i.id === over.id);
+        return arrayMove(items, from, to);
+      });
+    }
+  };
+
+  return (
+    <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+      <SortableContext items={steps.map((s) => s.id)} strategy={verticalListSortingStrategy}>
+        <div className="flex flex-col gap-2">
+          {steps.map((s) => (
+            <SortableItem key={s.id} id={s.id}>
+              <div className="flex-1 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] px-3 py-2 text-sm text-[var(--text-primary)]">
+                {s.text}
+              </div>
+            </SortableItem>
+          ))}
+        </div>
+      </SortableContext>
+    </DndContext>
+  );
+}
 
 interface Task {
   id: number;
@@ -80,6 +119,13 @@ export default function InteractionPage() {
             setTasks(reordered);
           }}
         />
+      </Section>
+
+      <Section
+        title="SortableItem (standalone)"
+        description="SortableList wraps each row in a SortableItem for you. Use SortableItem directly only when composing your own DndContext — here a plain vertical list of steps."
+      >
+        <StandaloneSortableDemo />
       </Section>
 
       <div className="section-grid section-grid-2">

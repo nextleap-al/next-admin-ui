@@ -5,12 +5,21 @@ import {
   Card,
   CardContent,
   CardHeader,
+  EditableCell,
   Input,
   PageHeader,
+  cn,
+  joinDateTime,
+  splitDateTime,
+  toDate,
+  toDateString,
+  toDateTimeString,
+  toTimeString,
   useDebounce,
   useDebouncedCallback,
   useInlineEdit,
   useQueryParams,
+  useRowInlineEdit,
 } from '@nextleap-al/admin-ui';
 import { Check, Edit3, Loader2, Search, X } from 'lucide-react';
 import { Section } from '../components/Section';
@@ -190,6 +199,66 @@ function UseQueryParamsDemo() {
   );
 }
 
+function UseRowInlineEditDemo() {
+  const [person, setPerson] = useState({ name: 'Grace Hopper', title: 'Rear Admiral' });
+  const row = useRowInlineEdit(person, async (updates) => {
+    await new Promise((r) => setTimeout(r, 500));
+    setPerson((p) => ({ ...p, ...updates }));
+  });
+
+  return (
+    <Card>
+      <CardHeader
+        title="useRowInlineEdit"
+        description="One row, several editable fields (one at a time). Pairs with EditableCell."
+      />
+      <CardContent>
+        <div className="grid grid-cols-[70px_1fr] items-center gap-x-3 gap-y-2">
+          <span className="text-sm text-[var(--text-tertiary)]">Name</span>
+          <EditableCell {...(row.getFieldProps('name') as any)} isSaving={row.isSaving} error={row.error} />
+          <span className="text-sm text-[var(--text-tertiary)]">Title</span>
+          <EditableCell {...(row.getFieldProps('title') as any)} isSaving={row.isSaving} error={row.error} />
+        </div>
+        <p className="mt-3 text-xs text-[var(--text-tertiary)]">
+          Click a value to edit · Enter saves · Escape cancels
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+function UtilsDemo() {
+  const sample = new Date(2026, 6, 14, 9, 30); // 14 Jul 2026, 09:30 local
+  const split = splitDateTime('2026-07-14T09:30');
+  const rows: Array<[string, string]> = [
+    ["cn('px-2 py-1 rounded', 'px-4')", cn('px-2 py-1 rounded', 'px-4', false && 'hidden')],
+    ['toDateString(sample)', toDateString(sample)],
+    ['toTimeString(sample)', toTimeString(sample)],
+    ['toDateTimeString(sample)', toDateTimeString(sample)],
+    ["toDate('2026-07-14T09:30')", toDate('2026-07-14T09:30')?.toString().slice(0, 24) + '…'],
+    ["splitDateTime('2026-07-14T09:30')", `{ date: '${split.date}', time: '${split.time}' }`],
+    ["joinDateTime('2026-07-14', '09:30')", joinDateTime('2026-07-14', '09:30')],
+  ];
+
+  return (
+    <Card>
+      <CardHeader
+        title="Utils — cn & dateValue"
+        description="cn merges Tailwind classes (later wins); the dateValue helpers convert local strings ↔ Date."
+      />
+      <CardContent>
+        <ul className="flex flex-col gap-2 text-sm text-[var(--text-secondary)]">
+          {rows.map(([call, result]) => (
+            <li key={call}>
+              <code className="text-xs">{call}</code> → “{result}”
+            </li>
+          ))}
+        </ul>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function HooksPage() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -221,7 +290,9 @@ export default function HooksPage() {
         <UseDebounceDemo />
         <UseDebouncedCallbackDemo />
         <UseInlineEditDemo />
+        <UseRowInlineEditDemo />
         <UseQueryParamsDemo />
+        <UtilsDemo />
       </div>
     </div>
   );

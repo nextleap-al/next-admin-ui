@@ -4,6 +4,7 @@ import {
   Button,
   ConfirmModal,
   Dropdown,
+  FormModal,
   Input,
   Modal,
   PageHeader,
@@ -18,11 +19,30 @@ export default function OverlayPage() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
+  const [formOpen, setFormOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [projectName, setProjectName] = useState('');
+
   const handleDelete = async () => {
     setDeleting(true);
     await new Promise((r) => setTimeout(r, 1200));
     setDeleting(false);
     setConfirmOpen(false);
+  };
+
+  // Simulated submit: empty name → error banner; otherwise "saves" and closes.
+  const handleCreate = async () => {
+    setFormError(null);
+    setSubmitting(true);
+    await new Promise((r) => setTimeout(r, 900));
+    setSubmitting(false);
+    if (!projectName.trim()) {
+      setFormError('Project name is required.');
+      return;
+    }
+    setFormOpen(false);
+    setProjectName('');
   };
 
   return (
@@ -49,6 +69,15 @@ export default function OverlayPage() {
           <Badge variant="warning" dot>
             Cannot be undone
           </Badge>
+        </DemoRow>
+      </Section>
+
+      <Section
+        title="FormModal"
+        description="A Modal wrapping a <form> with a standard Cancel/Submit footer + an automatic error banner. Submit with an empty name to see the banner."
+      >
+        <DemoRow>
+          <Button onClick={() => setFormOpen(true)}>New project</Button>
         </DemoRow>
       </Section>
 
@@ -144,6 +173,28 @@ export default function OverlayPage() {
         variant="danger"
         isLoading={deleting}
       />
+
+      <FormModal
+        isOpen={formOpen}
+        onClose={() => {
+          setFormOpen(false);
+          setFormError(null);
+        }}
+        title="New project"
+        description="FormModal owns the footer and the error banner — you just drop in the fields."
+        onSubmit={handleCreate}
+        isSubmitting={submitting}
+        error={formError}
+        submitLabel="Create project"
+      >
+        <Input
+          label="Project name"
+          placeholder="Acme redesign"
+          value={projectName}
+          onChange={(e) => setProjectName(e.target.value)}
+        />
+        <Textarea label="Description (optional)" placeholder="What's this project about?" rows={3} />
+      </FormModal>
     </div>
   );
 }

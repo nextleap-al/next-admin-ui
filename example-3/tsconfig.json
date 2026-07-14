@@ -21,8 +21,8 @@
     "baseUrl": ".",
     "paths": {
       "@nextleap-al/admin-ui": ["../src/index.ts"],
-      "@nextleap-al/admin-ui/tailwind-preset": ["../src/tailwind-preset.ts"],
-      "@/*": ["../src/*"]
+      "@/*": ["../src/*"],
+      "lucide-react": ["../node_modules/lucide-react"]
     }
   },
   "include": ["src", "../src"]

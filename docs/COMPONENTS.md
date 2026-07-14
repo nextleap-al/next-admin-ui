@@ -30,6 +30,12 @@ import { Button, Card, Input, DataTable, /* etc. */ } from '@nextleap-al/admin-u
   - [`DatePicker`](#datepicker)
   - [`DateRangePicker`](#daterangepicker)
   - [`DateRangePickerWithTimeInput`](#daterangepickerwithtimeinput)
+  - [`DateField` family](#datefield-family)
+  - [`FormDateField` / `FormDateRangeField`](#formdatefield--formdaterangefield)
+  - [Lower-level date controls](#lower-level-date-controls)
+  - [Preset factories](#preset-factories)
+  - [`InlineSelect`](#inlineselect)
+  - [`FormBanner`](#formbanner)
 - [Display](#display)
   - [`Card`, `CardHeader`, `CardContent`, `CardFooter`](#card)
   - [`Badge` / `StatusBadge`](#badge--statusbadge)
@@ -40,15 +46,19 @@ import { Button, Card, Input, DataTable, /* etc. */ } from '@nextleap-al/admin-u
   - [`PageHeader`](#pageheader)
   - [`Breadcrumbs`](#breadcrumbs)
   - [`Logo`](#logo)
+  - [`Spinner` / `FullPageSpinner` / `FullPageError`](#spinner--fullpagespinner--fullpageerror)
+  - [`CollapsibleSection`](#collapsiblesection)
 - [Overlay](#overlay)
   - [`Modal`](#modal)
   - [`ConfirmModal`](#confirmmodal)
+  - [`FormModal`](#formmodal)
   - [`Dropdown` (low-level menu)](#dropdown-low-level-menu)
 - [Data](#data)
   - [`DataTable`](#datatable)
   - [`EditableCell`](#editablecell)
   - [`RowActions`](#rowactions)
   - [`Tabs`, `TabList`, `TabTrigger`, `TabContent`](#tabs)
+  - [`ListView`](#listview)
 - [Interaction](#interaction)
   - [`SortableList` / `SortableItem`](#sortablelist--sortableitem)
   - [`FileUploadDropzone`](#fileuploaddropzone)
@@ -63,6 +73,8 @@ import { Button, Card, Input, DataTable, /* etc. */ } from '@nextleap-al/admin-u
   - [`ThemeToggleButton`](#themetogglebutton)
   - [`SearchTriggerButton`](#searchtriggerbutton)
   - [`NotificationBell`](#notificationbell)
+- [Utils](#utils)
+  - [`dateValue` helpers](#datevalue-helpers)
 
 ---
 
@@ -350,6 +362,207 @@ Same shape as `DateRangePickerProps` with identical props. Adds hour/minute
 inputs inside the calendar popover for both the `from` and `to` dates, so
 the resulting `Date` objects include a time component.
 
+### `DateField` family
+
+A unified, **auto-committing** date/time field — the modern alternative to the
+Apply-gated `DatePicker` / `DateRangePicker`. Two things set it apart:
+
+- **No Apply button.** It commits and closes the popover the instant the
+  selection is complete (a full date; both range endpoints; hour + minute; …).
+- **String in / string out.** Values are plain local, timezone-naive strings —
+  exactly the format the matching native `<input>` emits — never `Date`
+  objects. Convert to/from `Date` with the
+  [`dateValue` helpers](#datevalue-helpers), and **never** with
+  `Date.toISOString()` (that's UTC and can shift the day).
+
+`DateField` is a single dispatcher, discriminated on `mode`:
+
+```ts
+type SingleMode = 'date' | 'datetime' | 'time';
+type RangeMode = 'date-range' | 'datetime-range';
+
+interface DateRangeValue { from: string; to: string }
+
+// Props shared by every mode:
+interface DateFieldCommonProps {
+  label?: string;
+  hint?: string;
+  error?: string;
+  required?: boolean;
+  disabled?: boolean;
+  placeholder?: string;
+  className?: string;
+  id?: string;
+  align?: 'start' | 'center' | 'end';
+  min?: string;                    // 'YYYY-MM-DD'
+  max?: string;                    // 'YYYY-MM-DD'
+  enableYearNavigation?: boolean;  // default true
+  'aria-label'?: string;
+}
+
+// Single modes — 'date' | 'datetime' | 'time':
+interface SingleFieldProps extends DateFieldCommonProps {
+  mode?: 'date' | 'datetime' | 'time';   // default 'date'
+  value: string;                          // '' when empty
+  onChange: (value: string) => void;
+  presets?: boolean | DatePreset[];       // true = built-in "Today / Tomorrow / …" ahead presets
+}
+
+// Range modes — 'date-range' | 'datetime-range':
+interface RangeFieldProps extends DateFieldCommonProps {
+  mode: 'date-range' | 'datetime-range';
+  value: DateRangeValue;                  // { from, to } — each '' when empty
+  onChange: (value: DateRangeValue) => void;
+  presets?: boolean | DateRangePreset[];
+  timePresets?: TimePreset[];             // datetime-range only; rail hidden when omitted
+}
+
+type DateFieldProps = SingleFieldProps | RangeFieldProps;  // discriminated on `mode`
+```
+
+**Value formats** (all local, timezone-naive):
+
+| Mode             | Value shape                                             |
+| ---------------- | ------------------------------------------------------- |
+| `date`           | `'YYYY-MM-DD'`                                           |
+| `datetime`       | `'YYYY-MM-DDTHH:mm'`                                     |
+| `time`           | `'HH:mm'`                                                |
+| `date-range`     | `{ from: 'YYYY-MM-DD', to: 'YYYY-MM-DD' }`               |
+| `datetime-range` | `{ from: 'YYYY-MM-DDTHH:mm', to: 'YYYY-MM-DDTHH:mm' }`   |
+
+**Behaviour**
+
+- Commits + closes the popover the moment the selection is complete (a single
+  date; both range dates; hour **and** minute; etc.).
+- **"Clear"** empties the value but keeps the popover open.
+- Clicking outside keeps whatever has been picked so far (a missing minute
+  defaults to `00`).
+
+```tsx
+import { useState } from 'react';
+import { DateField } from '@nextleap-al/admin-ui';
+
+function Example() {
+  const [date, setDate] = useState('');                 // 'date' → 'YYYY-MM-DD'
+  const [range, setRange] = useState({ from: '', to: '' });
+
+  return (
+    <>
+      <DateField
+        label="Start date"
+        value={date}
+        onChange={setDate}
+      />
+
+      <DateField
+        mode="date-range"
+        label="Reporting period"
+        value={range}
+        onChange={setRange}
+        presets            // built-in range presets
+      />
+    </>
+  );
+}
+```
+
+### `FormDateField` / `FormDateRangeField`
+
+Bind `DateField` to **react-hook-form** (an optional peer dependency,
+`react-hook-form@>=7`).
+
+```ts
+function FormDateField<T>(
+  props: Omit<SingleFieldProps, 'value' | 'onChange' | 'error'> & {
+    control: Control<T>;
+    name: FieldPath<T>;
+    error?: string;
+  },
+): JSX.Element;
+
+function FormDateRangeField<T>(
+  props: Omit<RangeFieldProps, 'value' | 'onChange' | 'error' | 'mode'> & {
+    control: Control<T>;
+    fromName: FieldPath<T>;
+    toName: FieldPath<T>;
+    mode?: RangeMode;
+    error?: string;
+  },
+): JSX.Element;
+```
+
+`FormDateRangeField` writes two separate form fields (`fromName` / `toName`)
+from a single popover.
+
+```tsx
+<FormDateField control={control} name="startsAt" mode="datetime" label="Starts at" />
+<FormDateRangeField control={control} fromName="from" toName="to" label="Window" />
+```
+
+### Lower-level date controls
+
+`DateCalendarField`, `DateTimeCalendarField`, `RangeCalendarField`,
+`DateTimeRangeCalendarField`, and `TimeSelectField` are the individual controls
+`DateField` dispatches to for each mode — use them directly for bespoke layouts.
+Each takes `value` / `onChange` / `hasError` / `disabled` / `presets` (etc.) and
+follows the same string-in / string-out contract as `DateField`.
+
+### Preset factories
+
+Presets are produced by factory functions rather than exported as constants, so
+each call returns an array computed relative to "now" and never drifts stale:
+
+```ts
+function makeAheadDatePresets(now?: Date): DatePreset[];            // Today, Tomorrow, …
+function makeAheadDateRangePresets(now?: Date): DateRangePreset[];  // ahead ranges
+function makeRecentDateRangePresets(now?: Date): DateRangePreset[]; // Last 7 days, This month, …
+
+interface TimePreset { label: string; from: string; to: string }   // 'HH:mm' endpoints
+```
+
+Pass the result to `DateField`'s `presets` (or `timePresets` for
+`datetime-range`), or just pass `presets` as a boolean to use the built-ins.
+
+### `InlineSelect`
+
+```ts
+interface InlineSelectProps extends Omit<SimpleDropdownProps, 'label'> {
+  label: string;      // rendered to the LEFT of the control, on one line
+  width?: string;     // Tailwind width class for the control, default 'w-[200px]'
+}
+```
+
+A labelled `SimpleDropdown` laid out inline (label on the left, control on the
+right) for toolbar / scope pickers and list filters. Forwards every other
+`SimpleDropdown` prop and defaults `size` to `sm`.
+
+```tsx
+<InlineSelect
+  label="Cohort"
+  value={cohortId}
+  onChange={setCohortId}
+  options={cohortOptions}
+/>
+```
+
+### `FormBanner`
+
+```ts
+interface FormBannerProps {
+  kind: 'error' | 'success';
+  className?: string;
+  children: ReactNode;
+}
+```
+
+Form-level message banner (`role="alert"`) colored from the `--error*` /
+`--success*` tokens. `FormModal` renders one automatically from its `error`
+prop.
+
+```tsx
+<FormBanner kind="error">Could not save changes. Try again.</FormBanner>
+```
+
 ---
 
 ## Display
@@ -481,9 +694,13 @@ interface PageHeaderProps {
   title: string;
   description?: string;
   actions?: ReactNode;
+  flush?: boolean;      // default false — drop the built-in mb-6 bottom margin
   className?: string;
 }
 ```
+
+Set `flush` on pages that own their own vertical rhythm (e.g. a `space-y-*`
+wrapper) so the header's default `mb-6` doesn't double up.
 
 ### `Breadcrumbs`
 
@@ -524,6 +741,50 @@ interface LogoProps {
 }
 ```
 
+### `Spinner` / `FullPageSpinner` / `FullPageError`
+
+```ts
+function Spinner(props: { className?: string }): JSX.Element;          // spinning ring in --primary; default 'h-6 w-6'
+function FullPageSpinner(): JSX.Element;                               // full-viewport centered Spinner
+function FullPageError(props: { message?: string; onRetry?: () => void }): JSX.Element; // full-viewport centered ErrorState
+```
+
+`Spinner` is the bare spinning ring (size it via `className`).
+`FullPageSpinner` and `FullPageError` center their content in the full viewport
+— reach for them at route-level loading / error boundaries.
+
+```tsx
+if (isLoading) return <FullPageSpinner />;
+if (error) return <FullPageError message="Couldn't load" onRetry={refetch} />;
+```
+
+### `CollapsibleSection`
+
+```ts
+interface CollapsibleSectionProps {
+  title: string;
+  description?: string;
+  icon?: ReactNode;      // rendered in the accent color, left of the title
+  action?: ReactNode;    // right-aligned control (shown only while open); clicking it does NOT toggle
+  defaultOpen?: boolean; // default true
+  children: ReactNode;
+}
+```
+
+A flat (bordered, no shadow) section card whose body collapses behind a
+clickable header (icon + title + description + chevron).
+
+```tsx
+<CollapsibleSection
+  title="Advanced"
+  description="Optional settings"
+  icon={<Settings className="w-4 h-4" />}
+  defaultOpen={false}
+>
+  <Input label="Webhook URL" />
+</CollapsibleSection>
+```
+
 ---
 
 ## Overlay
@@ -560,6 +821,44 @@ interface ConfirmModalProps {
   variant?: 'danger' | 'warning' | 'default';
   isLoading?: boolean;
 }
+```
+
+### `FormModal`
+
+```ts
+interface FormModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  description?: string;
+  onSubmit: (e?: BaseSyntheticEvent) => void;
+  isSubmitting: boolean;
+  error?: string | null;            // shown as a FormBanner above the fields
+  submitLabel?: string;             // default 'Save'
+  submitClassName?: string;         // extra classes for the submit button
+  size?: 'sm' | 'md' | 'lg' | 'xl'; // default 'md'
+  children: ReactNode;
+}
+```
+
+A `Modal` wrapping a `<form>` with a standard Cancel / Submit footer plus an
+optional top-level error banner. Cancel is an `outline` button; Submit is
+`primary` with `isLoading={isSubmitting}`. Pass your fields as `children` and
+wire `onSubmit` to your submit handler (e.g. react-hook-form's
+`handleSubmit(...)`).
+
+```tsx
+<FormModal
+  isOpen={open}
+  onClose={close}
+  title="Invite user"
+  onSubmit={handleSubmit(onSubmit)}
+  isSubmitting={mutation.isPending}
+  error={mutation.error?.message}
+  submitLabel="Send invite"
+>
+  <Input label="Email" {...register('email')} />
+</FormModal>
 ```
 
 ### `Dropdown` (low-level menu)
@@ -736,6 +1035,79 @@ interface TabContentProps {
   value: string;
   children: ReactNode;
   className?: string;
+}
+```
+
+### `ListView`
+
+A server-driven paginated list page: a `PageHeader` plus a `DataTable` speaking
+`{ items, page, pageSize, total }`. It renders its own pagination footer that
+adds an **"All"** page-size option the DataTable's built-in pagination doesn't
+offer. Pair it with the [`useListParams`](./HOOKS.md#uselistparams) hook.
+
+```ts
+interface ListViewProps<T> {
+  title: string;
+  icon?: ReactNode;
+  description?: string;
+  headerActions?: ReactNode;
+
+  columns: ColumnDef<T, unknown>[];
+  items: T[] | undefined;
+  total: number | undefined;
+
+  page: number;
+  pageSize: number;
+  onPageChange: (page: number) => void;
+  onPageSizeChange: (pageSize: number) => void;
+
+  isLoading: boolean;
+  error?: unknown;
+  onRetry?: () => void;
+
+  // Server search box — provide BOTH to enable it
+  search?: string;
+  onSearchChange?: (value: string) => void;
+  searchPlaceholder?: string;
+
+  rowActions?: (row: T) => ReactNode;
+  onRowClick?: (row: T) => void;
+
+  maxPageSize?: number;  // rows requested by "All"; default 100 — set to your backend's page-size cap
+}
+```
+
+> **Always feed it the current server page.** `ListView` never paginates,
+> searches, or filters client-side — every `page` / `pageSize` / `search`
+> change is meant to trigger a server refetch.
+
+```tsx
+import { ListView, useListParams } from '@nextleap-al/admin-ui';
+
+function UsersPage() {
+  const { page, pageSize, search, setPage, setPageSize, setSearch } = useListParams();
+  const { data, isLoading, error, refetch } = useUsers({ page, pageSize, search });
+
+  return (
+    <ListView
+      title="Users"
+      description="Everyone with access."
+      columns={columns}
+      items={data?.items}
+      total={data?.total}
+      page={page}
+      pageSize={pageSize}
+      onPageChange={setPage}
+      onPageSizeChange={setPageSize}
+      search={search}
+      onSearchChange={setSearch}
+      searchPlaceholder="Search users…"
+      isLoading={isLoading}
+      error={error}
+      onRetry={refetch}
+      maxPageSize={200}
+    />
+  );
 }
 ```
 
@@ -1006,3 +1378,26 @@ interface NotificationBellProps {
   className?: string;
 }
 ```
+
+---
+
+## Utils
+
+### `dateValue` helpers
+
+Conversions between the local, timezone-naive string format `DateField` uses and
+JS `Date`. Use these instead of `Date.toISOString()` (which is UTC and can shift
+the calendar day for anyone not on UTC).
+
+```ts
+function toDate(value: string | undefined | null): Date | undefined; // parse 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:mm' (local)
+function toDateString(date: Date | undefined): string;               // -> 'YYYY-MM-DD' (local)
+function toTimeString(date: Date | undefined): string;               // -> 'HH:mm' (local)
+function toDateTimeString(date: Date | undefined): string;           // -> 'YYYY-MM-DDTHH:mm' (local)
+function splitDateTime(value: string): { date: string; time: string };
+function joinDateTime(date: string, time: string): string;           // '' when date is empty
+```
+
+`cn(...classes)` — merge Tailwind class names (via `clsx` + `tailwind-merge`, so
+later classes win on conflict). Used internally by every component and safe to
+use in your own markup.

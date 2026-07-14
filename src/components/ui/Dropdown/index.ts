@@ -28,3 +28,7 @@ export type { MultiSelectSimpleProps } from './MultiSelectSimple';
 // Action menu - for action buttons (edit, delete, etc.)
 export { ActionMenu } from './ActionMenu';
 export type { ActionMenuProps, ActionMenuItem } from './ActionMenu';
+
+// Inline select - a labelled SimpleDropdown laid out on one line (toolbar/scope pickers)
+export { InlineSelect } from './InlineSelect';
+export type { InlineSelectProps } from './InlineSelect';

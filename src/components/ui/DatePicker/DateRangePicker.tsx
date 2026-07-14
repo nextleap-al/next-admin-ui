@@ -19,8 +19,8 @@ const focusRing = [
 const triggerStyles = cn(
   // base
   'peer flex w-full cursor-pointer appearance-none items-center gap-x-2 truncate rounded-xl border px-3 py-2 shadow-xs outline-hidden transition-all text-sm',
-  // background color
-  'bg-[var(--bg-primary)]',
+  // background color (elevated surface, so it stays crisp over a tinted page canvas)
+  'bg-[var(--bg-elevated)]',
   // border color
   'border-[var(--border-default)]',
   // text color

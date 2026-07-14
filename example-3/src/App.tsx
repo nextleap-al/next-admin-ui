@@ -14,6 +14,7 @@ import {
 } from '@nextleap-al/admin-ui';
 import {
   Boxes,
+  CalendarDays,
   Database,
   Grid3x3,
   Home,
@@ -29,6 +30,7 @@ import {
 import OverviewPage from './pages/OverviewPage';
 import ActionsPage from './pages/ActionsPage';
 import FormPage from './pages/FormPage';
+import DatesPage from './pages/DatesPage';
 import DisplayPage from './pages/DisplayPage';
 import OverlayPage from './pages/OverlayPage';
 import DataPage from './pages/DataPage';
@@ -46,6 +48,7 @@ const NAV: NavEntry[] = [
   { to: '/overview', label: 'Overview', icon: <Home className="w-5 h-5" />, section: 'Explore' },
   { to: '/actions', label: 'Actions', icon: <MousePointerClick className="w-5 h-5" />, section: 'Building blocks' },
   { to: '/forms', label: 'Form', icon: <TextCursorInput className="w-5 h-5" />, section: 'Building blocks' },
+  { to: '/dates', label: 'Dates', icon: <CalendarDays className="w-5 h-5" />, section: 'Building blocks' },
   { to: '/display', label: 'Display', icon: <Sparkles className="w-5 h-5" />, section: 'Building blocks' },
   { to: '/overlay', label: 'Overlay', icon: <SquareStack className="w-5 h-5" />, section: 'Building blocks' },
   { to: '/data', label: 'Data', icon: <Database className="w-5 h-5" />, section: 'Advanced' },
@@ -161,6 +164,7 @@ export default function App() {
         <Route path="/overview" element={<OverviewPage />} />
         <Route path="/actions" element={<ActionsPage />} />
         <Route path="/forms" element={<FormPage />} />
+        <Route path="/dates" element={<DatesPage />} />
         <Route path="/display" element={<DisplayPage />} />
         <Route path="/overlay" element={<OverlayPage />} />
         <Route path="/data" element={<DataPage />} />

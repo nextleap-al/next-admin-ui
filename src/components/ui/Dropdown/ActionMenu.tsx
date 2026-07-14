@@ -136,7 +136,7 @@ export function ActionMenu({
           >
             <Menu.Items
               className={cn(
-                'absolute z-50 mt-1 w-48 rounded-xl bg-white dark:bg-gray-900 border border-[var(--border-light)] shadow-lg focus:outline-none overflow-hidden',
+                'absolute z-50 mt-1 w-48 rounded-xl bg-white dark:bg-[#2b2b2b] border border-[var(--border-light)] shadow-lg focus:outline-none overflow-hidden',
                 align === 'right' && 'right-0',
                 align === 'left' && 'left-0'
               )}

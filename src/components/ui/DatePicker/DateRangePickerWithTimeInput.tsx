@@ -19,8 +19,8 @@ const focusRing = [
 const triggerStyles = cn(
   // base
   'peer flex w-full cursor-pointer appearance-none items-center gap-x-2 truncate rounded-xl border px-3 py-2 shadow-xs outline-hidden transition-all text-sm',
-  // background color
-  'bg-[var(--bg-primary)]',
+  // background color (elevated surface, so it stays crisp over a tinted page canvas)
+  'bg-[var(--bg-elevated)]',
   // border color
   'border-[var(--border-default)]',
   // text color
@@ -218,7 +218,7 @@ const TimeInput = ({ value, onChange, label, disabled }: TimeInputProps) => {
           onChange={handleHoursChange}
           disabled={disabled}
           className={cn(
-            'w-12 rounded-lg border border-[var(--border-default)] bg-[var(--bg-primary)] px-2 py-1.5 text-center text-sm',
+            'w-12 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] px-2 py-1.5 text-center text-sm',
             'focus:border-gold-400 focus:outline-none focus:ring-2 focus:ring-gold-400/20',
             'disabled:bg-[var(--surface-100)] disabled:text-[var(--text-muted)] disabled:cursor-not-allowed'
           )}
@@ -233,7 +233,7 @@ const TimeInput = ({ value, onChange, label, disabled }: TimeInputProps) => {
           onChange={handleMinutesChange}
           disabled={disabled}
           className={cn(
-            'w-12 rounded-lg border border-[var(--border-default)] bg-[var(--bg-primary)] px-2 py-1.5 text-center text-sm',
+            'w-12 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] px-2 py-1.5 text-center text-sm',
             'focus:border-gold-400 focus:outline-none focus:ring-2 focus:ring-gold-400/20',
             'disabled:bg-[var(--surface-100)] disabled:text-[var(--text-muted)] disabled:cursor-not-allowed'
           )}

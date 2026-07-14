@@ -72,7 +72,7 @@ used anywhere in the library (and in your app, if you use the preset) switches.
 | `--bg-primary`        | Page background                                     |
 | `--bg-secondary`      | Panel background                                    |
 | `--bg-tertiary`       | Nested panel background                             |
-| `--bg-elevated`       | Floating surfaces (cards, dropdowns, modals)        |
+| `--bg-elevated`       | Floating surfaces (cards, dropdowns, modals) + form control fills |
 | `--bg-glass`          | Glassmorphism background                            |
 | `--bg-overlay`        | Modal/dialog overlay                                |
 | `--surface-50…900`    | Neutral ramp (backgrounds & subtle fills)           |
@@ -83,10 +83,18 @@ used anywhere in the library (and in your app, if you use the preset) switches.
 | `--text-inverse`      | Text on primary-colored surfaces                    |
 | `--border-light`      | Subtle divider                                      |
 | `--border-default`    | Inputs, cards                                       |
+| `--border-primary`    | Alias of `--border-default` (dropdown search inputs)|
 | `--border-strong`     | Hover / emphasized border                           |
 | `--border-focus`      | Focus ring color (defaults to gold)                 |
 | `--success`, `--warning`, `--error`, `--info` | status tokens (each also has a `-light` variant) |
 | `--bg-nested-elevated` | Background for cards inside `bg-elevated` surfaces |
+
+> **Form controls sit on `--bg-elevated`, not `--bg-primary`.** Inputs, the
+> dropdown/date-field triggers, and the DataTable's inline controls fill with
+> `--bg-elevated` so they stay crisp when you tint the page canvas
+> (`--bg-primary`). Keep `--bg-elevated` distinct from your tinted `--bg-primary`
+> if you want that separation; by default both are white (light) / near-black
+> (dark).
 
 ### Dimensions & motion
 

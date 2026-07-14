@@ -9,6 +9,7 @@ import {
   useInlineEdit,
   useRowInlineEdit,
   useQueryParams,
+  useListParams,
 } from '@nextleap-al/admin-ui';
 ```
 
@@ -213,3 +214,57 @@ const { page, pageSize, search, setParam, setParams } = useQueryParams();
 > equivalent `react-router-dom` provider). If you use a different router,
 > build your own equivalent hook — the rest of the library does not depend
 > on this one.
+
+---
+
+## `useListParams` *(requires `react-router-dom`)*
+
+An opinionated layer over `useQueryParams` for server-driven lists — binds
+`page` / `pageSize` / `search` to the URL query string (so a list is shareable
+and back-button safe). Feed the result to [`ListView`](./COMPONENTS.md#listview).
+
+```ts
+interface ListParams {
+  page: number;
+  pageSize: number;
+  search: string;
+  setPage: (page: number) => void;
+  setPageSize: (pageSize: number) => void;   // also resets to page 1
+  setSearch: (value: string) => void;         // also resets to page 1
+}
+
+function useListParams(options?: { defaultPageSize?: number }): ListParams; // defaultPageSize default 10
+```
+
+- An absent `pageSize` falls back to `defaultPageSize` (unlike `useQueryParams`,
+  whose generic getter defaults to 20).
+- `setPageSize` and `setSearch` reset the page to 1 in a **single** URL update
+  (two separate `setParam` calls would clobber each other).
+- Clearing the search (empty string) drops the param from the URL.
+
+```tsx
+function UsersPage() {
+  const { page, pageSize, search, setPage, setPageSize, setSearch } = useListParams();
+  const { data, isLoading, error, refetch } = useUsers({ page, pageSize, search });
+
+  return (
+    <ListView
+      title="Users"
+      columns={columns}
+      items={data?.items}
+      total={data?.total}
+      page={page}
+      pageSize={pageSize}
+      onPageChange={setPage}
+      onPageSizeChange={setPageSize}
+      search={search}
+      onSearchChange={setSearch}
+      isLoading={isLoading}
+      error={error}
+      onRetry={refetch}
+    />
+  );
+}
+```
+
+> **Requirement:** like `useQueryParams`, needs a `react-router-dom` provider.

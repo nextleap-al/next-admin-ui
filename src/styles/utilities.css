@@ -146,3 +146,29 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* DateField pickers: on committing a selection the panel gives a quick zoom-in "pop", then zooms out
+   and fades as it closes. `.nl-picker-pop` is toggled on the popover's inner card for CLOSE_DELAY_MS —
+   keep the 300ms duration below in sync with that constant in the *CalendarField components. */
+
+@keyframes nl-picker-pop {
+  0% { transform: scale(1); opacity: 1; }
+  40% { transform: scale(1.03); opacity: 1; }
+  100% { transform: scale(0.94); opacity: 0; }
+}
+
+.nl-picker-pop {
+  transform-origin: center;
+  animation: nl-picker-pop 300ms ease-in-out forwards;
+}
+
+/* ListView renders its own pagination footer (`.nl-list-footer`) so it can offer an "All" page size the
+   DataTable's built-in footer can't. Flatten the table card's bottom so that footer attaches seamlessly,
+   turning the card + footer into one continuous card. `.nl-list-datatable` is the class ListView passes to
+   the DataTable; its direct `.rounded-xl` child is the table card. */
+
+.nl-list-datatable > .rounded-xl {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-width: 0;
+}

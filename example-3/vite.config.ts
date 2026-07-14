@@ -15,7 +15,16 @@ export default defineConfig({
       '@nextleap-al/admin-ui': path.resolve(libSrc, 'index.ts'),
       '@': libSrc,
     },
-    dedupe: ['react', 'react-dom', 'react-router-dom'],
+    // Dedupe every package the example and the library both pull in, so there is a single
+    // copy of each — the example always runs against the library's own dependency versions.
+    dedupe: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'react-hook-form',
+      'lucide-react',
+      '@tanstack/react-table',
+    ],
   },
   server: {
     port: 5175,

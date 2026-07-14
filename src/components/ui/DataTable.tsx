@@ -233,7 +233,9 @@ function DataTable<TData>({
 
   return (
     <div className={cn('space-y-4', className)}>
-      {/* Toolbar */}
+      {/* Toolbar — skip the row entirely when it holds nothing, so the outer `space-y-4` can't add a
+          phantom gap above the table on a list with no search box, toolbar, column toggle, or create button. */}
+      {(onSearchChange || toolbar || enableColumnVisibility || (enableInlineCreate && onInlineCreate)) && (
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
         <div className="flex flex-1 gap-3 items-center">
           {onSearchChange && (
@@ -277,6 +279,7 @@ function DataTable<TData>({
           )}
         </div>
       </div>
+      )}
 
       {/* Table */}
       <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-elevated)] overflow-hidden">
@@ -386,7 +389,7 @@ function DataTable<TData>({
                 <select
                   value={pagination.pageSize}
                   onChange={(e) => onPageSizeChange(Number(e.target.value))}
-                  className="h-8 px-2 text-sm rounded-lg border border-[var(--border-default)] bg-[var(--bg-primary)] text-[var(--text-primary)]"
+                  className="h-8 px-2 text-sm rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-primary)]"
                 >
                   {[10, 20, 50, 100].map((size) => (
                     <option key={size} value={size}>
@@ -460,7 +463,7 @@ const EditableCell = ({
           }}
           autoFocus
           className={cn(
-            'flex-1 h-7 px-2 text-sm rounded border bg-[var(--bg-primary)]',
+            'flex-1 h-7 px-2 text-sm rounded border bg-[var(--bg-elevated)]',
             error ? 'border-red-500' : 'border-gold-400 ring-2 ring-gold-400/20'
           )}
         />

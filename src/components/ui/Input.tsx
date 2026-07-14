@@ -62,7 +62,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             type={inputType}
             disabled={disabled}
             className={cn(
-              'w-full rounded-xl border border-[var(--border-default)] bg-[var(--bg-primary)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] transition-all duration-150',
+              'w-full rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] transition-all duration-150',
               'hover:border-[var(--border-strong)]',
               'focus:outline-none focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20',
               'disabled:bg-[var(--surface-100)] disabled:text-[var(--text-muted)] disabled:cursor-not-allowed',

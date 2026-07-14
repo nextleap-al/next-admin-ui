@@ -22,14 +22,48 @@ export {
   MultiSelectDropdown,
   MultiSelectSimple,
   ActionMenu,
+  InlineSelect,
   type SimpleDropdownProps,
   type SearchDropdownProps,
   type MultiSelectDropdownProps,
   type MultiSelectSimpleProps,
   type ActionMenuProps,
   type ActionMenuItem,
+  type InlineSelectProps,
   type DropdownOption,
 } from './Dropdown/index';
+
+// Form composition helpers
+export { FormBanner, type FormBannerProps } from './FormBanner';
+export { FormModal, type FormModalProps } from './FormModal';
+
+// Unified auto-commit date/time field (string in / string out) — an Apply-free alternative to
+// the Date-object DatePicker/DateRangePicker below.
+export {
+  DateField,
+  FormDateField,
+  FormDateRangeField,
+  DateCalendarField,
+  DateTimeCalendarField,
+  RangeCalendarField,
+  DateTimeRangeCalendarField,
+  TimeSelectField,
+  makeAheadDatePresets,
+  makeAheadDateRangePresets,
+  makeRecentDateRangePresets,
+  type DateFieldProps,
+  type DateRangeValue,
+  type SingleMode,
+  type RangeMode,
+  type FormDateFieldProps,
+  type FormDateRangeFieldProps,
+  type DateCalendarFieldProps,
+  type DateTimeCalendarFieldProps,
+  type RangeCalendarFieldProps,
+  type DateTimeRangeCalendarFieldProps,
+  type TimeSelectFieldProps,
+  type TimePreset,
+} from './DateField';
 
 // Date Picker Components
 export {

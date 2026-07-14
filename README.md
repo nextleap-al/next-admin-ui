@@ -30,12 +30,16 @@ npm i -D @tailwindcss/vite     # Vite
 npm i -D @tailwindcss/postcss  # Next.js / PostCSS-based setups
 ```
 
-Optional — only if you use `<Breadcrumbs>`, `<Logo>`, or `<SidebarNavItem>` with
-the default `Link` (you can otherwise pass your own via the `LinkComponent`
-prop, e.g. `next/link`):
+Optional peers — install only if you use the features that need them:
 
 ```bash
+# useQueryParams / useListParams, and the default Link for <Breadcrumbs>, <Logo>,
+# <SidebarNavItem> (you can otherwise pass your own via the `LinkComponent` prop):
 npm i react-router-dom
+
+# FormDateField / FormDateRangeField (the react-hook-form bindings for DateField).
+# The plain <DateField> is uncontrolled and needs nothing extra.
+npm i react-hook-form
 ```
 
 ### Runtime dependencies (installed automatically)
@@ -99,40 +103,24 @@ In your entry CSS (e.g. `src/styles.css`, imported once from `main.tsx`):
 @import 'tailwindcss';
 @import '@nextleap-al/admin-ui/styles.css';
 
-/* Load the NextLeap preset (colors, shadows, animations).
-   Path is resolved relative to THIS css file. */
-@config './tailwind.config.ts';
+/* v4 auto-detection skips node_modules, so point Tailwind at the library dist
+   so its class names are generated. Path is relative to THIS css file. */
+@source '../node_modules/@nextleap-al/admin-ui/dist';
 ```
 
 `@import '@nextleap-al/admin-ui/styles.css'` pulls in the design tokens, base
-reset, and utility classes. If you only want the tokens (no base reset), swap it
-for `@import '@nextleap-al/admin-ui/tokens.css'`.
+reset, utility classes, **and** the Tailwind v4 `@theme` registration (the
+`primary`/`gold`/`surface` color scales, fonts, shadows, animations, and dark
+mode on **both** `.dark` and `[data-theme="dark"]`). If you only want the tokens
+(no base reset), swap it for `@import '@nextleap-al/admin-ui/tokens.css'`.
 
-### 3. Tailwind config (bridged via `@config`)
+### 3. No JS config needed
 
-The library ships its theme as a classic JS **preset**, so keep a small
-`tailwind.config.ts` that the `@config` directive above loads:
-
-```ts
-import type { Config } from 'tailwindcss';
-import nextleapPreset from '@nextleap-al/admin-ui/tailwind-preset';
-
-export default {
-  presets: [nextleapPreset],
-  content: [
-    './index.html',
-    './src/**/*.{ts,tsx}',
-    // IMPORTANT: include the library so its class names are detected.
-    // v4 auto-detection skips node_modules, so list the dist explicitly:
-    './node_modules/@nextleap-al/admin-ui/dist/**/*.{js,cjs}',
-  ],
-} satisfies Config;
-```
-
-> The preset registers the `primary`/`gold`/`surface` color scales, fonts,
-> shadows, and animations, and enables dark mode on **both** `.dark` and
-> `[data-theme="dark"]`. All values map to CSS variables, so you re-theme at
-> runtime (see [Theming](#theming)) without touching this config.
+This is a **CSS-first** setup: there is no `tailwind.config.ts`, no JS preset,
+and no `@config` — importing `styles.css` above is all Tailwind needs. Every
+value resolves to a runtime CSS variable, so you re-theme at runtime (see
+[Theming](#theming)) without a rebuild. See [`example-3`](./example-3) for a
+complete working reference.
 
 ### 4. Use components
 
@@ -173,13 +161,13 @@ Quick example (rebrand the primary color):
 
 | Area      | Modules |
 | --------- | ------- |
-| UI        | `Button`, `Input`, `Textarea`, `Checkbox`, `Switch`, `StatusSwitch`, `Card` (+ `CardHeader`, `CardContent`, `CardFooter`), `Badge`, `StatusBadge`, `Avatar`, `AvatarGroup`, `Modal`, `ConfirmModal`, `Dropdown`, `SimpleDropdown`, `SearchDropdown`, `MultiSelectDropdown`, `MultiSelectSimple`, `ActionMenu`, `DataTable` (+ `EditableCell`, `RowActions`), `DatePicker`, `DateRangePicker`, `DateRangePickerWithTimeInput`, `Calendar`, `Tabs` (+ `TabList`, `TabTrigger`, `TabContent`), `Tooltip`, `Skeleton` (+ `SkeletonText`, `SkeletonCard`, `SkeletonTable`, `SkeletonList`), `EmptyState` (+ `NoResults`, `NoData`, `NoUsers`, `NoNotifications`, `NoEvents`, `NoCompetitions`, `ErrorState`, `FileNotFound`) |
-| Common    | `Breadcrumbs`, `Logo`, `PageHeader`, `FileUploadDropzone`, `FileSelectDropzone`, `SortableList`, `SortableItem` |
+| UI        | `Button`, `Input`, `Textarea`, `Checkbox`, `Switch`, `StatusSwitch`, `Card` (+ `CardHeader`, `CardContent`, `CardFooter`), `Badge`, `StatusBadge`, `Avatar`, `AvatarGroup`, `Modal`, `ConfirmModal`, `FormModal`, `FormBanner`, `Dropdown`, `SimpleDropdown`, `SearchDropdown`, `MultiSelectDropdown`, `MultiSelectSimple`, `InlineSelect`, `ActionMenu`, `DataTable` (+ `EditableCell`, `RowActions`), `DatePicker`, `DateRangePicker`, `DateRangePickerWithTimeInput`, `Calendar`, `DateField` (+ `FormDateField`, `FormDateRangeField`, `DateCalendarField`, `DateTimeCalendarField`, `RangeCalendarField`, `DateTimeRangeCalendarField`, `TimeSelectField`), `Tabs` (+ `TabList`, `TabTrigger`, `TabContent`), `Tooltip`, `Skeleton` (+ `SkeletonText`, `SkeletonCard`, `SkeletonTable`, `SkeletonList`), `EmptyState` (+ `NoResults`, `NoData`, `NoUsers`, `NoNotifications`, `NoEvents`, `NoCompetitions`, `ErrorState`, `FileNotFound`) |
+| Common    | `Breadcrumbs`, `Logo`, `PageHeader`, `ListView`, `CollapsibleSection`, `Spinner`, `FullPageSpinner`, `FullPageError`, `FileUploadDropzone`, `FileSelectDropzone`, `SortableList`, `SortableItem` |
 | Layout    | `AppShell`, `SidebarShell`, `SidebarSection`, `SidebarNavItem`, `SidebarFooterActions`, `TopbarShell`, `ThemeToggleButton`, `SearchTriggerButton`, `NotificationBell` |
-| Hooks     | `useDebounce`, `useDebouncedCallback`, `useInlineEdit`, `useRowInlineEdit`, `useQueryParams` |
-| Utils     | `cn` |
+| Hooks     | `useDebounce`, `useDebouncedCallback`, `useInlineEdit`, `useRowInlineEdit`, `useQueryParams`, `useListParams` |
+| Utils     | `cn`, `toDate`, `toDateString`, `toTimeString`, `toDateTimeString`, `splitDateTime`, `joinDateTime` |
 | Types     | `PaginationMeta`, `PaginatedResponse`, `PaginationParams`, `SortParams`, `FilterParams`, `QueryParams` |
-| Presets   | `DEFAULT_DATE_PRESETS`, `DEFAULT_DATE_RANGE_PRESETS` |
+| Presets   | `DEFAULT_DATE_PRESETS`, `DEFAULT_DATE_RANGE_PRESETS`, `makeAheadDatePresets`, `makeAheadDateRangePresets`, `makeRecentDateRangePresets` |
 
 ---
 

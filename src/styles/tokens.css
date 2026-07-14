@@ -66,6 +66,9 @@
   /* Borders */
   --border-light: #e5e5e5;
   --border-default: #d4d4d4;
+  /* Alias of --border-default; referenced by the dropdown search inputs. Defined so consumers can
+     tune input borders independently, and so the token is never undefined. */
+  --border-primary: #d4d4d4;
   --border-strong: #a3a3a3;
   --border-focus: #c5982d;
 
@@ -152,6 +155,7 @@
 
   --border-light: #333333;
   --border-default: #303030;
+  --border-primary: #303030;
   --border-strong: #404040;
 
   --success-light: rgba(34, 197, 94, 0.15);

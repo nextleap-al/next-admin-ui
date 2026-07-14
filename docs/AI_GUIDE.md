@@ -31,21 +31,26 @@ Categories:
 - **Actions** — `Button`
 - **Form** — `Input`, `Textarea`, `Checkbox`, `Switch`, `StatusSwitch`,
   `SimpleDropdown`, `SearchDropdown`, `MultiSelectDropdown`,
-  `MultiSelectSimple`, `DatePicker`, `DateRangePicker`,
-  `DateRangePickerWithTimeInput`, `Calendar`
+  `MultiSelectSimple`, `InlineSelect`, `DatePicker`, `DateRangePicker`,
+  `DateRangePickerWithTimeInput`, `Calendar`, `DateField` (+ `FormDateField`,
+  `FormDateRangeField`, `DateCalendarField`, `DateTimeCalendarField`,
+  `RangeCalendarField`, `DateTimeRangeCalendarField`, `TimeSelectField`),
+  `FormBanner`
 - **Display** — `Card`, `Badge`, `StatusBadge`, `Avatar`, `AvatarGroup`,
-  `Tooltip`, `Skeleton`, `EmptyState`, `PageHeader`, `Breadcrumbs`, `Logo`
-- **Overlay** — `Modal`, `ConfirmModal`, `Dropdown`, `ActionMenu`
+  `Tooltip`, `Skeleton`, `EmptyState`, `PageHeader`, `Breadcrumbs`, `Logo`,
+  `Spinner`, `FullPageSpinner`, `FullPageError`, `CollapsibleSection`
+- **Overlay** — `Modal`, `ConfirmModal`, `FormModal`, `Dropdown`, `ActionMenu`
 - **Data** — `DataTable`, `EditableCell`, `RowActions`, `Tabs`, `TabList`,
-  `TabTrigger`, `TabContent`
+  `TabTrigger`, `TabContent`, `ListView`
 - **Interaction** — `SortableList`, `SortableItem`, `FileUploadDropzone`,
   `FileSelectDropzone`
 - **Layout (app shell)** — `AppShell`, `SidebarShell`, `SidebarSection`,
   `SidebarNavItem`, `SidebarFooterActions`, `TopbarShell`,
   `ThemeToggleButton`, `SearchTriggerButton`, `NotificationBell`
 - **Hooks** — `useDebounce`, `useDebouncedCallback`, `useInlineEdit`,
-  `useRowInlineEdit`, `useQueryParams`
-- **Utils** — `cn`
+  `useRowInlineEdit`, `useQueryParams`, `useListParams`
+- **Utils** — `cn`, `toDate`, `toDateString`, `toTimeString`,
+  `toDateTimeString`, `splitDateTime`, `joinDateTime`
 
 ---
 
@@ -312,6 +317,71 @@ Exported constants: `DEFAULT_DATE_PRESETS`, `DEFAULT_DATE_RANGE_PRESETS`.
 `DateRangePickerWithTimeInput` adds hour/minute inputs — see
 [`COMPONENTS.md`](./COMPONENTS.md) for the full props.
 
+### `DateField` (auto-commit, string in / string out)
+
+Prefer this over `DatePicker`/`DateRangePicker` for form fields: **no Apply
+button** (commits + closes when the selection is complete) and **plain local
+strings** in/out (not `Date`), so it drops straight into form state. One
+component, five `mode`s.
+
+```ts
+type DateRangeValue = { from: string; to: string };
+
+DateField(props: {
+  mode?: 'date' | 'datetime' | 'time' | 'date-range' | 'datetime-range'; // default 'date'
+  value: string | DateRangeValue;      // string for single modes; { from, to } for range modes
+  onChange: (value: string | DateRangeValue) => void;
+  presets?: boolean | DatePreset[] | DateRangePreset[]; // true = built-in "ahead" shortcuts
+  timePresets?: TimePreset[];          // datetime-range only
+  label?: string; hint?: string; error?: string; required?: boolean;
+  disabled?: boolean; placeholder?: string; align?: 'start'|'center'|'end';
+  min?: string; max?: string;          // 'YYYY-MM-DD'
+  enableYearNavigation?: boolean; className?: string; id?: string;
+}): JSX.Element
+```
+
+Value formats (local, timezone-naive): `date`→`'YYYY-MM-DD'`,
+`datetime`→`'YYYY-MM-DDTHH:mm'`, `time`→`'HH:mm'`; range modes →
+`{ from, to }` each in that mode's format. Convert to/from `Date` with the
+`dateValue` helpers — never `Date.toISOString()`.
+
+```tsx
+const [d, setD] = useState('');                    // 'YYYY-MM-DD'
+<DateField label="Due date" value={d} onChange={setD} presets />
+
+const [r, setR] = useState({ from: '', to: '' });
+<DateField mode="date-range" label="Window" value={r} onChange={setR} />
+```
+
+- **RHF binding:** `FormDateField` (`{ control, name }`) and `FormDateRangeField`
+  (`{ control, fromName, toName }`) — needs `react-hook-form` (optional peer).
+- **Lower-level:** `DateCalendarField`, `DateTimeCalendarField`,
+  `RangeCalendarField`, `DateTimeRangeCalendarField`, `TimeSelectField` are the
+  per-mode controls (same string contract) for bespoke layouts.
+- **Presets:** `makeAheadDatePresets()`, `makeAheadDateRangePresets()`,
+  `makeRecentDateRangePresets()` return fresh arrays relative to now.
+
+### `InlineSelect`
+
+A `SimpleDropdown` with its label on the **left** (one line) — for toolbars,
+scope pickers, and list filters. Forwards all `SimpleDropdown` props.
+
+```ts
+InlineSelect(props: SimpleDropdownProps & {
+  label: string;      // to the left of the control
+  width?: string;     // control width class, default 'w-[200px]'
+}): JSX.Element
+```
+
+### `FormBanner`
+
+Form-level alert colored from the `--error*` / `--success*` tokens. `FormModal`
+renders one from its `error` prop.
+
+```ts
+FormBanner(props: { kind: 'error' | 'success'; className?: string; children: ReactNode }): JSX.Element
+```
+
 ---
 
 ## Display
@@ -476,6 +546,9 @@ EmptyState(props: {
 />
 ```
 
+Has a built-in `mb-6`. Pass `flush` to drop it when the page owns its own
+`space-y-*` rhythm (so the gap under the title isn't double-counted).
+
 ### `Breadcrumbs`
 
 ```tsx
@@ -507,6 +580,31 @@ import { Link } from 'react-router-dom';
   href="/"
   LinkComponent={Link as any}
 />
+```
+
+### `Spinner` / `FullPageSpinner` / `FullPageError`
+
+```ts
+Spinner(props: { className?: string }): JSX.Element          // ring, colored --primary; default 'h-6 w-6'
+FullPageSpinner(): JSX.Element                                // full-viewport centered Spinner
+FullPageError(props: { message?: string; onRetry?: () => void }): JSX.Element  // full-viewport ErrorState
+```
+
+Use `FullPageSpinner` / `FullPageError` for a route's initial load/error state.
+
+### `CollapsibleSection`
+
+A flat (bordered, no shadow) section card whose body collapses behind a
+clickable header. The `action` control doesn't toggle.
+
+```ts
+CollapsibleSection(props: {
+  title: string; description?: string;
+  icon?: ReactNode;       // rendered in the accent color
+  action?: ReactNode;     // right-aligned, only while open; doesn't toggle
+  defaultOpen?: boolean;  // default true
+  children: ReactNode;
+}): JSX.Element
 ```
 
 ---
@@ -576,6 +674,32 @@ ConfirmModal(props: {
   variant?: 'danger' | 'warning' | 'default';
   isLoading?: boolean;
 }): JSX.Element
+```
+
+### `FormModal`
+
+A `Modal` wrapping a `<form>` with a Cancel/Submit footer and an automatic
+error banner (`FormBanner` from `error`). Drop fields in as `children`.
+
+```ts
+FormModal(props: {
+  isOpen: boolean; onClose: () => void;
+  title: string; description?: string;
+  onSubmit: (e?: BaseSyntheticEvent) => void;   // preventDefault is handled
+  isSubmitting: boolean;
+  error?: string | null;                        // → FormBanner above the fields
+  submitLabel?: string;                         // default 'Save'
+  submitClassName?: string;                     // extra classes for the submit button
+  size?: 'sm' | 'md' | 'lg' | 'xl';             // default 'md'
+  children: ReactNode;
+}): JSX.Element
+```
+
+```tsx
+<FormModal isOpen={open} onClose={close} title="New project"
+  onSubmit={form.submit} isSubmitting={form.saving} error={form.error}>
+  <Input label="Name" {...} />
+</FormModal>
 ```
 
 ### `Dropdown` (low-level menu)
@@ -732,6 +856,34 @@ TabContent(props: {
   children: ReactNode;
   className?: string;
 }): JSX.Element
+```
+
+### `ListView<T>`
+
+A server-driven list page: `PageHeader` + `DataTable` speaking
+`{ items, page, pageSize, total }`, with its own footer that adds an **"All"**
+page size. Pair with `useListParams`. Never paginate/filter client-side — feed
+it the current server page.
+
+```ts
+ListView<T>(props: {
+  title: string; icon?: ReactNode; description?: string; headerActions?: ReactNode;
+  columns: ColumnDef<T, unknown>[];
+  items: T[] | undefined; total: number | undefined;
+  page: number; pageSize: number;
+  onPageChange: (page: number) => void; onPageSizeChange: (pageSize: number) => void;
+  isLoading: boolean; error?: unknown; onRetry?: () => void;
+  search?: string; onSearchChange?: (v: string) => void; searchPlaceholder?: string; // provide both to enable search
+  rowActions?: (row: T) => ReactNode; onRowClick?: (row: T) => void;
+  maxPageSize?: number;   // rows for "All"; default 100 — set to your backend cap
+}): JSX.Element
+```
+
+```tsx
+const { page, pageSize, search, setPage, setPageSize, setSearch } = useListParams();
+<ListView title="Users" columns={cols} items={data?.items} total={data?.total}
+  page={page} pageSize={pageSize} onPageChange={setPage} onPageSizeChange={setPageSize}
+  search={search} onSearchChange={setSearch} isLoading={isLoading} error={error} />
 ```
 
 ---
@@ -919,6 +1071,16 @@ const {
 Convenience setters (`setPage`, `setSearch`, …) are not included — use
 `setParam('page', 2)` etc.
 
+### `useListParams({ defaultPageSize? })` *(requires `react-router-dom`)*
+
+URL-bound `page` / `pageSize` / `search` for server-driven lists — feed it to
+`ListView`. Changing size or search resets to page 1.
+
+```ts
+const { page, pageSize, search, setPage, setPageSize, setSearch } =
+  useListParams({ defaultPageSize: 20 });
+```
+
 ---
 
 ## Utils
@@ -929,4 +1091,18 @@ Tailwind-safe class composition — combines `clsx` + `tailwind-merge`.
 
 ```ts
 cn('p-2', isActive && 'bg-primary-500', className);
+```
+
+### `dateValue` helpers
+
+Local, timezone-naive string ↔ `Date` conversions for `DateField` values. Never
+use `Date.toISOString()` for form values (UTC — shifts the day).
+
+```ts
+toDate(value): Date | undefined;         // 'YYYY-MM-DD' | 'YYYY-MM-DDTHH:mm' -> Date (local)
+toDateString(date): string;              // -> 'YYYY-MM-DD'
+toTimeString(date): string;              // -> 'HH:mm'
+toDateTimeString(date): string;          // -> 'YYYY-MM-DDTHH:mm'
+splitDateTime(value): { date, time };    // 'YYYY-MM-DDTHH:mm' -> parts
+joinDateTime(date, time): string;        // parts -> 'YYYY-MM-DDTHH:mm'
 ```

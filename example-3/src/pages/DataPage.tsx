@@ -9,12 +9,15 @@ import {
   CardHeader,
   DataTable,
   Input,
+  ListView,
   PageHeader,
+  RowActions,
   StatusBadge,
   TabContent,
   TabList,
   TabTrigger,
   Tabs,
+  useListParams,
   type PaginationMeta,
 } from '@nextleap-al/admin-ui';
 import type { ColumnDef, RowSelectionState, SortingState } from '@tanstack/react-table';
@@ -57,6 +60,9 @@ export default function DataPage() {
   const [editingUserId, setEditingUserId] = useState<number | null>(null);
   const [editDraft, setEditDraft] = useState({ name: '', email: '' });
 
+  // ListView's URL-bound list state (page / pageSize / search live in the query string).
+  const list = useListParams({ defaultPageSize: 10 });
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return users;
@@ -89,6 +95,17 @@ export default function DataPage() {
   const pageData = sorted.slice((safePage - 1) * pageSize, safePage * pageSize);
 
   const pagination: PaginationMeta = { page: safePage, pageSize, total, totalPages };
+
+  // Derived state for the ListView demo — a server-style page over the same users, driven by the URL.
+  const listFiltered = useMemo(() => {
+    const q = list.search.trim().toLowerCase();
+    if (!q) return ALL_USERS;
+    return ALL_USERS.filter(
+      (u) => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q),
+    );
+  }, [list.search]);
+  const listStart = (list.page - 1) * list.pageSize;
+  const listPage = listFiltered.slice(listStart, listStart + list.pageSize);
 
   const removeUser = (id: number) => {
     setUsers((prev) => prev.filter((u) => u.id !== id));
@@ -302,6 +319,31 @@ export default function DataPage() {
   ];
   const DataTableWithInline = DataTable as any;
 
+  const listColumns: ColumnDef<User, unknown>[] = [
+    {
+      accessorKey: 'name',
+      header: 'Name',
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <Avatar name={row.original.name} size="sm" />
+          <span className="text-sm font-medium text-[var(--text-primary)]">{row.original.name}</span>
+        </div>
+      ),
+    },
+    { accessorKey: 'email', header: 'Email' },
+    {
+      accessorKey: 'role',
+      header: 'Role',
+      cell: ({ row }) => {
+        const r = row.original.role;
+        return (
+          <Badge variant={r === 'Admin' ? 'primary' : r === 'Member' ? 'info' : 'outline'}>{r}</Badge>
+        );
+      },
+    },
+    { accessorKey: 'status', header: 'Status', cell: ({ row }) => <StatusBadge status={row.original.status} /> },
+  ];
+
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
@@ -434,6 +476,47 @@ export default function DataPage() {
           </Card>
         </TabContent>
       </Tabs>
+
+      <div className="border-t border-[var(--border-light)] pt-6">
+        <p className="mb-4 text-xs font-medium uppercase tracking-wide text-[var(--text-tertiary)]">
+          ListView — a full list-page pattern (PageHeader + DataTable + URL-bound paging, with an “All” page size)
+        </p>
+        <ListView
+          title="Team members"
+          description="Page, size, and search live in the URL via useListParams — reload or share the link and the view is preserved."
+          columns={listColumns}
+          items={listPage}
+          total={listFiltered.length}
+          page={list.page}
+          pageSize={list.pageSize}
+          onPageChange={list.setPage}
+          onPageSizeChange={list.setPageSize}
+          isLoading={false}
+          search={list.search}
+          onSearchChange={list.setSearch}
+          searchPlaceholder="Search members…"
+        />
+      </div>
+
+      <div className="border-t border-[var(--border-light)] pt-6">
+        <p className="mb-3 text-xs font-medium uppercase tracking-wide text-[var(--text-tertiary)]">
+          RowActions — a compact row-level “⋯” menu (used in a cell's actions column)
+        </p>
+        <div className="flex items-center justify-between rounded-lg border border-[var(--border-light)] bg-[var(--bg-elevated)] px-4 py-3">
+          <div className="flex items-center gap-2">
+            <Avatar name="Ada Lovelace" size="sm" />
+            <span className="text-sm font-medium text-[var(--text-primary)]">Ada Lovelace</span>
+          </div>
+          <RowActions
+            items={[
+              { label: 'Edit', icon: <Pencil className="w-4 h-4" />, onClick: () => alert('Edit (demo)') },
+              { label: 'Send email', icon: <Mail className="w-4 h-4" />, onClick: () => alert('Email (demo)') },
+              { label: '', divider: true },
+              { label: 'Delete', icon: <Trash2 className="w-4 h-4" />, danger: true, onClick: () => alert('Delete (demo)') },
+            ]}
+          />
+        </div>
+      </div>
     </div>
   );
 }
