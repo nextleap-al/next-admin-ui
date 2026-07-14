@@ -1,11 +1,15 @@
 /* ============================================
    @nextleap-al/admin-ui — Main stylesheet
 
-   Single import that provides tokens, base reset, and utility classes.
-   If you only want tokens (no base reset), import `@nextleap-al/admin-ui/tokens.css`
-   directly and skip this file.
+   Single import that registers the Tailwind v4 theme and provides tokens,
+   base reset, and utility classes. Import this once, after `@import
+   "tailwindcss"`, in your app's root stylesheet.
+
+   If you only want tokens (no theme registration or base reset), import
+   `@nextleap-al/admin-ui/tokens.css` directly and skip this file.
    ============================================ */
 
+@import './theme.css';
 @import './fonts.css';
 @import './tokens.css';
 @import './base.css' layer(base);

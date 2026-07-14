@@ -15,9 +15,9 @@
        --bg-primary: #111111;
      }
 
-   The Tailwind preset maps `primary-*`, `gold-*`, `surface-*` scales
-   to CSS variables (prefixed `--nl-*` for the color scales and
-   `--surface-*` for the neutral ramp). See `tailwind-preset.ts`.
+   The Tailwind v4 theme (`theme.css`) maps the `primary-*`, `gold-*`,
+   and `surface-*` utility scales to these variables (prefixed `--nl-*`
+   for the brand color scales and `--surface-*` for the neutral ramp).
    ============================================ */
 
 :root {

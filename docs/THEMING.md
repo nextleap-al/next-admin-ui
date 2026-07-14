@@ -6,11 +6,14 @@ changes — by overriding the variables in your app's stylesheet.
 
 ## Where to override
 
-Put overrides **after** you import the library styles:
+Put overrides **after** you import the library styles (Tailwind v4, CSS-first):
 
 ```css
+@import 'tailwindcss';
 @import '@nextleap-al/admin-ui/styles.css';
+@config './tailwind.config.ts';
 
+/* your overrides come last so they win */
 :root {
   --nl-primary-500: #3b82f6;
   --bg-primary: #fafafa;

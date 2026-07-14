@@ -1,9 +1,12 @@
 @import 'tailwindcss';
 @import '@nextleap-al/admin-ui/styles.css';
 
-/* Load the NextLeap preset (colors, shadows, animations) from the
-   legacy JS config. Tailwind 4 resolves this relative to this file. */
-@config '../tailwind.config.ts';
+/* This example consumes the library from source (see the Vite aliases), which
+   lives outside example-3, so Tailwind's automatic content detection won't scan
+   it. Point `@source` at the library source so its class names are generated.
+   A real app installing from npm would instead use:
+     @source '../node_modules/@nextleap-al/admin-ui/dist'; */
+@source '../../src';
 
 /* ============================================
    example-3 theme override — blue primary, purple accent.

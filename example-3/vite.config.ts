@@ -10,7 +10,6 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@nextleap-al/admin-ui/tailwind-preset': path.resolve(libSrc, 'tailwind-preset.ts'),
       '@nextleap-al/admin-ui/styles.css': path.resolve(libSrc, 'styles/index.css'),
       '@nextleap-al/admin-ui/tokens.css': path.resolve(libSrc, 'styles/tokens.css'),
       '@nextleap-al/admin-ui': path.resolve(libSrc, 'index.ts'),

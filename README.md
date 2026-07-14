@@ -19,10 +19,15 @@ npm i @nextleap-al/admin-ui
 ### Peer dependencies (you must install these)
 
 The consumer app is expected to provide React, ReactDOM, and Tailwind itself.
-Any modern React + Tailwind project already has them:
+This library targets **Tailwind CSS v4** (`tailwindcss@>=4`). Any modern React +
+Tailwind v4 project already has them:
 
 ```bash
-npm i react react-dom tailwindcss
+npm i react react-dom tailwindcss@^4
+# + the Tailwind v4 build integration for your bundler:
+npm i -D @tailwindcss/vite     # Vite
+# or
+npm i -D @tailwindcss/postcss  # Next.js / PostCSS-based setups
 ```
 
 Optional — only if you use `<Breadcrumbs>`, `<Logo>`, or `<SidebarNavItem>` with
@@ -60,11 +65,53 @@ tailwind-merge         # class deduping (used by `cn`)
 > than adding them manually, so the version ranges stay aligned with the
 > library's lockfile.
 
-## Setup
+## Setup (Tailwind CSS v4)
 
-### 1. Tailwind preset
+Tailwind v4 is **CSS-first** — there is no `@tailwind base/components/utilities`
+and no PostCSS `tailwindcss` plugin. You wire everything up from your root
+stylesheet. See [`example-3`](./example-3) for a complete working reference.
 
-In your `tailwind.config.{js,ts}`:
+### 1. Enable the Tailwind v4 build plugin
+
+**Vite** — add the official plugin to `vite.config.ts`:
+
+```ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+});
+```
+
+**Next.js / PostCSS** — use `@tailwindcss/postcss` in `postcss.config.mjs`:
+
+```js
+export default { plugins: { '@tailwindcss/postcss': {} } };
+```
+
+### 2. Root stylesheet
+
+In your entry CSS (e.g. `src/styles.css`, imported once from `main.tsx`):
+
+```css
+@import 'tailwindcss';
+@import '@nextleap-al/admin-ui/styles.css';
+
+/* Load the NextLeap preset (colors, shadows, animations).
+   Path is resolved relative to THIS css file. */
+@config './tailwind.config.ts';
+```
+
+`@import '@nextleap-al/admin-ui/styles.css'` pulls in the design tokens, base
+reset, and utility classes. If you only want the tokens (no base reset), swap it
+for `@import '@nextleap-al/admin-ui/tokens.css'`.
+
+### 3. Tailwind config (bridged via `@config`)
+
+The library ships its theme as a classic JS **preset**, so keep a small
+`tailwind.config.ts` that the `@config` directive above loads:
 
 ```ts
 import type { Config } from 'tailwindcss';
@@ -75,32 +122,19 @@ export default {
   content: [
     './index.html',
     './src/**/*.{ts,tsx}',
-    // IMPORTANT: include the library so its class names are detected
+    // IMPORTANT: include the library so its class names are detected.
+    // v4 auto-detection skips node_modules, so list the dist explicitly:
     './node_modules/@nextleap-al/admin-ui/dist/**/*.{js,cjs}',
   ],
 } satisfies Config;
 ```
 
-### 2. Styles
+> The preset registers the `primary`/`gold`/`surface` color scales, fonts,
+> shadows, and animations, and enables dark mode on **both** `.dark` and
+> `[data-theme="dark"]`. All values map to CSS variables, so you re-theme at
+> runtime (see [Theming](#theming)) without touching this config.
 
-Import the library's default tokens + utilities once (typically in `main.tsx`
-or your root CSS file) **after** Tailwind's base/components/utilities:
-
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@import '@nextleap-al/admin-ui/styles.css';
-```
-
-If you only want the design tokens (not the base/utilities):
-
-```css
-@import '@nextleap-al/admin-ui/tokens.css';
-```
-
-### 3. Use components
+### 4. Use components
 
 ```tsx
 import { Button, Card, Input, AppShell, SidebarShell } from '@nextleap-al/admin-ui';

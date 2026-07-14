@@ -1,0 +1,94 @@
+/* ============================================
+   @nextleap-al/admin-ui — Tailwind v4 theme
+
+   Registers the design-system's Tailwind utilities natively via `@theme`.
+   No JS preset, no `tailwind.config`, no `@config` — importing this file
+   (it's pulled in by `@nextleap-al/admin-ui/styles.css`) is all a consumer
+   needs after `@import "tailwindcss"`.
+
+   Every value resolves to a runtime CSS variable declared in `tokens.css`,
+   so you re-theme the whole library by overriding those variables — no
+   rebuild. See `docs/THEMING.md`.
+   ============================================ */
+
+/* Dark mode: engage `dark:` utilities on EITHER `[data-theme="dark"]` or
+   the `.dark` class (matches the strategy the components ship with). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
+
+/* Utilities whose values reference runtime tokens use `@theme inline`, so the
+   generated classes point at the token directly (`var(--nl-primary-500)` …)
+   and stay overridable at runtime. Inline theme variables are NOT emitted to
+   `:root`, which also keeps names like `--shadow-glass`/`--radius-*` from
+   colliding with the semantic tokens of the same name in `tokens.css`. */
+@theme inline {
+  /* Brand color scale — override via `--nl-primary-*` */
+  --color-primary-50:  var(--nl-primary-50,  #ecfdf3);
+  --color-primary-100: var(--nl-primary-100, #d1fae3);
+  --color-primary-200: var(--nl-primary-200, #a6f4c9);
+  --color-primary-300: var(--nl-primary-300, #6de9a6);
+  --color-primary-400: var(--nl-primary-400, #44d269);
+  --color-primary-500: var(--nl-primary-500, #3ab45a);
+  --color-primary-600: var(--nl-primary-600, #0f9d3c);
+  --color-primary-700: var(--nl-primary-700, #0d7b32);
+  --color-primary-800: var(--nl-primary-800, #0e612a);
+  --color-primary-900: var(--nl-primary-900, #0c5025);
+  --color-primary-950: var(--nl-primary-950, #042c12);
+
+  /* Accent color scale (gold) — override via `--nl-gold-*` */
+  --color-gold-50:  var(--nl-gold-50,  #fdf8eb);
+  --color-gold-100: var(--nl-gold-100, #f9eecf);
+  --color-gold-200: var(--nl-gold-200, #f3dca0);
+  --color-gold-300: var(--nl-gold-300, #edc86d);
+  --color-gold-400: var(--nl-gold-400, #c5982d);
+  --color-gold-500: var(--nl-gold-500, #bc8821);
+  --color-gold-600: var(--nl-gold-600, #b57918);
+  --color-gold-700: var(--nl-gold-700, #8d5d14);
+  --color-gold-800: var(--nl-gold-800, #744c14);
+  --color-gold-900: var(--nl-gold-900, #604016);
+  --color-gold-950: var(--nl-gold-950, #362108);
+
+  /* Neutral ramp — override via `--surface-*` (dark-adapts in tokens.css) */
+  --color-surface-50:  var(--surface-50);
+  --color-surface-100: var(--surface-100);
+  --color-surface-200: var(--surface-200);
+  --color-surface-300: var(--surface-300);
+  --color-surface-400: var(--surface-400);
+  --color-surface-500: var(--surface-500);
+  --color-surface-600: var(--surface-600);
+  --color-surface-700: var(--surface-700);
+  --color-surface-800: var(--surface-800);
+  --color-surface-900: var(--surface-900);
+
+  /* Extra font size (→ `text-2xs`) */
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: 0.875rem;
+
+  /* Custom shadows. `glow`/`gold-glow` tints follow the runtime glow tokens. */
+  --shadow-glass:      0 0 20px 0 rgba(0, 0, 0, 0.05);
+  --shadow-glass-lg:   0 8px 32px 0 rgba(0, 0, 0, 0.08);
+  --shadow-glow:       0 0 24px -4px var(--primary-glow, rgba(68, 210, 105, 0.3));
+  --shadow-gold-glow:  0 0 24px -4px var(--secondary-glow, rgba(197, 152, 45, 0.3));
+  --shadow-inner-glow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+
+  /* Extra radius (→ `rounded-4xl`) and blur (→ `backdrop-blur-xs`) */
+  --radius-4xl: 2rem;
+  --blur-xs: 2px;
+
+  /* Animations. Keyframes are defined in `utilities.css`. */
+  --animate-fade-in:    fadeIn 0.3s ease-out;
+  --animate-slide-up:   slideUp 0.3s ease-out;
+  --animate-slide-down: slideDown 0.3s ease-out;
+  --animate-scale-in:   scaleIn 0.2s ease-out;
+  --animate-shimmer:    shimmer 2s infinite;
+  --animate-pulse-soft: pulseSoft 2s ease-in-out infinite;
+  --animate-spin-slow:  spinSlow 1.2s linear infinite;
+}
+
+/* Fonts use a NON-inline block so `--font-sans` lands on `:root` for
+   Tailwind's Preflight (`html { font-family: var(--font-sans) }`), while the
+   overridable `--nl-font-*` still resolves underneath. */
+@theme {
+  --font-sans:    var(--nl-font-sans, "Chillax"), system-ui, sans-serif;
+  --font-display: var(--nl-font-display, "Chillax"), system-ui, sans-serif;
+  --font-mono:    var(--nl-font-mono, "JetBrains Mono"), monospace;
+}

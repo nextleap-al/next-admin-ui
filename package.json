@@ -1,6 +1,6 @@
 {
   "name": "@nextleap-al/admin-ui",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Shared design-system primitives, hooks, and layout building blocks used across NextLeap ecosystem apps. Tailwind-based, theme-overridable, designed for AI-driven UI composition.",
   "type": "module",
   "author": "nextleap",
@@ -31,12 +31,7 @@
       "require": "./dist/index.cjs"
     },
     "./styles.css": "./src/styles/index.css",
-    "./tokens.css": "./src/styles/tokens.css",
-    "./tailwind-preset": {
-      "types": "./dist/tailwind-preset.d.ts",
-      "import": "./dist/tailwind-preset.js",
-      "require": "./dist/tailwind-preset.cjs"
-    }
+    "./tokens.css": "./src/styles/tokens.css"
   },
   "files": [
     "dist",
