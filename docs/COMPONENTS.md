@@ -161,7 +161,7 @@ interface SwitchProps {
 
 interface StatusSwitchProps extends Omit<SwitchProps, 'checked' | 'onChange'> {
   isActive: boolean;
-  onToggle: (isActive: boolean) => void | Promise<void>;
+  onToggle: (isActive: boolean) => void;
   activeLabel?: string;    // default 'Active'
   inactiveLabel?: string;  // default 'Inactive'
   showLabel?: boolean;     // default false
@@ -182,18 +182,16 @@ interface DropdownOption {
 
 interface SimpleDropdownProps {
   options: DropdownOption[];
-  value?: string | number | null;
+  value: string | number | null;
   onChange: (value: string | number) => void;
-  placeholder?: string;        // default 'Select'
+  placeholder?: string;        // default 'Select...'
   label?: string;
   error?: string;
   hint?: string;
   disabled?: boolean;
   size?: 'sm' | 'md' | 'lg';   // default 'md'
   className?: string;
-  required?: boolean;
-  id?: string;
-  name?: string;
+  renderLabel?: (option: DropdownOption | null) => ReactNode;
 }
 ```
 
@@ -206,8 +204,6 @@ interface SearchDropdownProps extends Omit<SimpleDropdownProps, 'onChange'> {
   loading?: boolean;
   /** Custom filter (default: matches label + searchText, case-insensitive). */
   filterFn?: (option: DropdownOption, query: string) => boolean;
-  /** Optional callback invoked as the user types (for external analytics). */
-  onSearchChange?: (query: string) => void;
 }
 ```
 
@@ -222,7 +218,7 @@ interface MultiSelectDropdownProps {
   options: DropdownOption[];
   value: Array<string | number>;
   onChange: (value: Array<string | number>) => void;
-  placeholder?: string;                  // default 'Select'
+  placeholder?: string;                  // default 'Select...'
   searchPlaceholder?: string;            // default 'Search...'
   label?: string;
   error?: string;
@@ -238,9 +234,6 @@ interface MultiSelectDropdownProps {
   /** Custom label renderer for the trigger. */
   renderLabel?: (selectedOptions: DropdownOption[]) => ReactNode;
   filterFn?: (option: DropdownOption, query: string) => boolean;
-  required?: boolean;
-  id?: string;
-  name?: string;
 }
 ```
 
@@ -249,9 +242,25 @@ interface MultiSelectDropdownProps {
 Same shape as `MultiSelectDropdown` but without the search input:
 
 ```ts
-interface MultiSelectSimpleProps extends Omit<MultiSelectDropdownProps,
-  'searchPlaceholder' | 'filterFn'
-> {}
+interface MultiSelectSimpleProps {
+  options: DropdownOption[];
+  value: Array<string | number>;
+  onChange: (value: Array<string | number>) => void;
+  placeholder?: string;
+  label?: string;
+  error?: string;
+  hint?: string;
+  disabled?: boolean;
+  size?: 'sm' | 'md' | 'lg';             // default 'md'
+  className?: string;
+  maxDisplayItems?: number;              // collapse the trigger to "N selected" past this
+  renderLabel?: (selectedOptions: DropdownOption[]) => ReactNode;
+  /** Allow the trigger's selected-label text to wrap to multiple lines. */
+  multilineLabel?: boolean;
+  /** Render options in a grid instead of a single list. */
+  gridOptions?: boolean;
+  gridColumns?: 2 | 3 | 4;               // when gridOptions is on
+}
 ```
 
 ### `ActionMenu`
@@ -271,12 +280,14 @@ interface ActionMenuItem {
 
 interface ActionMenuProps {
   items: ActionMenuItem[];
+  /** Custom trigger element (overrides the default/labeled button). */
+  trigger?: ReactNode;
+  /** Text for the default (labeled) trigger button. */
+  triggerLabel?: string;
   align?: 'left' | 'right';       // default 'right'
-  /**
-   * When true renders the default three-dot trigger button. Pass a ReactNode
-   * to use a fully custom trigger.
-   */
-  moreIcon?: boolean | ReactNode;
+  size?: 'sm' | 'md' | 'lg';      // trigger size
+  /** Render the three-dot icon button as the trigger. */
+  moreIcon?: boolean;
   className?: string;
 }
 ```
@@ -358,9 +369,9 @@ interface DateRangePickerProps {
 
 ### `DateRangePickerWithTimeInput`
 
-Same shape as `DateRangePickerProps` with identical props. Adds hour/minute
-inputs inside the calendar popover for both the `from` and `to` dates, so
-the resulting `Date` objects include a time component.
+Same props as `DateRangePickerProps`, plus `showTimePicker?: boolean` (default
+`true`). Adds hour/minute inputs inside the calendar popover for both the `from`
+and `to` dates, so the resulting `Date` objects include a time component.
 
 ### `DateField` family
 
@@ -580,7 +591,7 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 `CardHeader` accepts either standard `children` **or** the shorthand props:
 
 ```ts
-interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+interface CardHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   title?: ReactNode;
   description?: ReactNode;
   action?: ReactNode;
@@ -647,11 +658,12 @@ interface TooltipProps {
 ### `Skeleton` + variants
 
 ```ts
-interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
+interface SkeletonProps {
   variant?: 'text' | 'circular' | 'rectangular' | 'rounded'; // default 'text'
   width?: string | number;
   height?: string | number;
   animation?: 'pulse' | 'wave' | 'none';                      // default 'wave'
+  className?: string;
 }
 
 SkeletonText({ lines?: number; className?: string })
@@ -707,8 +719,16 @@ wrapper) so the header's default `mb-6` doesn't double up.
 ```ts
 interface BreadcrumbsItem { label: string; href?: string }
 
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
 interface BreadcrumbsProps {
-  items: BreadcrumbsItem[];
+  items: BreadcrumbItem[];
+  homeHref?: string;
+  homeIcon?: ReactNode;
+  separator?: ReactNode;
   LinkComponent?: React.ComponentType<{
     to: string;
     className?: string;
@@ -813,7 +833,7 @@ interface ModalProps {
 interface ConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void | Promise<void>;
+  onConfirm: () => void;
   title: string;           // required
   message: string;         // required
   confirmLabel?: string;   // default 'Confirm'
@@ -925,16 +945,6 @@ interface DataTableProps<TData> {
 
   // Row actions rendered in a trailing column
   rowActions?: (row: TData) => ReactNode;
-
-  // Inline editing
-  enableInlineEdit?: boolean;
-  editableColumns?: string[];                 // if omitted, every column is editable
-  onInlineEditSave?: (params: {
-    row: TData;
-    rowIndex: number;
-    columnId: string;
-    value: string;
-  }) => void | Promise<void>;
 
   // Inline create (adds a "create" button to the toolbar)
   enableInlineCreate?: boolean;
@@ -1206,17 +1216,13 @@ DnD, etc.). For a plain vertical list always prefer `SortableList`.
 ```ts
 interface FileUploadDropzoneProps {
   onUpload: (file: File) => Promise<void>;
-  onDelete?: () => Promise<void>;
+  onDelete?: () => void;
   /** File types to accept. Extensions ('pdf') OR MIME types ('image/png'). */
   acceptedTypes?: string[];                         // default all
   maxSizeMb?: number;                               // default 10
-  existingFile?: { name: string; url?: string; status?: string } | null;
-  isUploading?: boolean;
+  existingFile?: { name: string; status: 'PENDING' | 'APPROVED' | 'REJECTED' };
   isDeleting?: boolean;
   disabled?: boolean;
-  label?: string;
-  hint?: string;
-  error?: string;
   className?: string;
 }
 ```
@@ -1227,15 +1233,12 @@ Used when the file is queued locally and uploaded later:
 
 ```ts
 interface FileSelectDropzoneProps {
-  selectedFile: File | null;
   onSelect: (file: File) => void;
-  onRemove?: () => void;
+  onRemove: () => void;
+  selectedFile?: File | null;
   acceptedTypes?: string[];
   maxSizeMb?: number;
   disabled?: boolean;
-  label?: string;
-  hint?: string;
-  error?: string;
   className?: string;
 }
 ```

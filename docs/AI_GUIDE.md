@@ -775,10 +775,6 @@ Dropdown(props: {
       ]}
     />
   )}
-  // inline editing (optional)
-  enableInlineEdit
-  editableColumns={['name', 'email']}
-  onInlineEditSave={async ({ row, columnId, value }) => { await api.update(row.id, { [columnId]: value }); }}
   // create button in toolbar (optional)
   enableInlineCreate
   onInlineCreate={openCreateModal}
