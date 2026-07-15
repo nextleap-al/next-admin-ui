@@ -11,25 +11,7 @@ default:
 # Library
 # ---------------------------------------------------------------------------
 
-# Install library dependencies
-install:
-    npm install
 
-# Rebuild the library on every change (tsup --watch)
-dev:
-    npm run dev
-
-# Build the library into dist/
-build:
-    npm run build
-
-# Type-check the library without emitting
-typecheck:
-    npm run typecheck
-
-# Lint the library source
-lint:
-    npm run lint
 
 # ---------------------------------------------------------------------------
 # Test app (example-3) — consumes the library via a Vite alias to ../src
@@ -50,21 +32,17 @@ example:
 example-build:
     npm run build
 
-# Preview the example-3 production build
-[working-directory: 'example-3']
-example-preview:
-    npm run preview
+# ---------------------------------------------------------------------------
+# Demo (Firebase Hosting) — https://next-admin-ui.web.app
+# ---------------------------------------------------------------------------
 
-# Fresh start: install lib + example deps, then launch the example dev server
-test-ui: install example-install example
+# Build example-3 and deploy it to Firebase Hosting
+deploy: example-build
+    firebase deploy --only hosting --project next-admin-ui
 
 # ---------------------------------------------------------------------------
 # Publishing
 # ---------------------------------------------------------------------------
-
-# Log in to the npm registry (interactive; needs @nextleap-al org access)
-login:
-    npm login
 
 # Preview exactly what will be published — uploads nothing
 pack:
@@ -74,6 +52,9 @@ pack:
 version bump:
     npm version {{bump}}
 
-# Build then publish to npm — add an OTP if you have 2FA: `just publish --otp=123456`
-publish *args: build
-    npm publish {{args}}
+# Release: bump+tag version, push tag, deploy demo, then npm publish (e.g. `just release minor`)
+release bump="patch":
+    npm version {{bump}}
+    git push --follow-tags
+    just deploy
+    just publish

@@ -4,6 +4,9 @@ Shared design-system primitives, hooks, and layout building blocks used across
 the NextLeap ecosystem. Tailwind-based, theme-overridable, and designed to be
 consumed by AI agents to compose new UIs quickly.
 
+> **Live demo:** [next-admin-ui.web.app](https://next-admin-ui.web.app) — the
+> [`example-3`](./example-3) app running on Firebase Hosting.
+
 > **AI agents:** start at [`docs/AI_GUIDE.md`](./docs/AI_GUIDE.md). It contains
 > a compact machine-readable catalogue of every component, its props, and ready
 > to paste examples.
